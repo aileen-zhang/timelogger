@@ -66,6 +66,6 @@ Follow these instructions to set up the admin user and create a client user.
 
 ## Atrribution
 
-Sample data sourced from [Aileen's log of fall 2021](https://docs.google.com/spreadsheets/d/1NGe55vSQycfRIBiebFc60zmSeRqaMS72zelMbZAtP64/edit?usp=sharing)
+Sample data modified from [Aileen's log of fall 2021](https://docs.google.com/spreadsheets/d/1NGe55vSQycfRIBiebFc60zmSeRqaMS72zelMbZAtP64/edit?usp=sharing)
 
 Made by Aileen Zhang for the CS 121 course at Caltech

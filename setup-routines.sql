@@ -106,9 +106,9 @@ END !
         -- set 'sl' as default unchangeable sleep symbol in user_task
         -- set corresponding value in activity_key
     
+    -- NOTE: do not use this when loading in sample data!
 CREATE PROCEDURE setup_user(
-    new_username    VARCHAR(10),
-    new_password    VARCHAR(20) -- TODO check this
+    user_id     -- TODO INT type of autoincrement
 )
 BEGIN 
     -- TODO STUFF HERE!

@@ -17,27 +17,6 @@ BEGIN
     RETURN salt;
 END !
 DELIMITER ;
--- Provided (you may modify if you choose)
--- This table holds information for authenticating users based on
--- a password.  Passwords are not stored plaintext so that they
--- cannot be used by people that shouldn't have them.
--- You may extend that table to include an is_admin or role attribute if you 
--- have admin or other roles for users in your application 
--- (e.g. store managers, data managers, etc.)
-CREATE TABLE user_info (
-    -- Usernames are up to 20 characters.
-    username VARCHAR(20) PRIMARY KEY,
-    -- Salt will be 8 characters all the time, so we can make this 8.
-    salt CHAR(8) NOT NULL,
-    -- We use SHA-2 with 256-bit hashes.  MySQL returns the hash
-    -- value as a hexadecimal string, which means that each byte is
-    -- represented as 2 characters.  Thus, 256 / 8 * 2 = 64.
-    -- We can use BINARY or CHAR here; BINARY simply has a different
-    -- definition for comparison/sorting than CHAR.
-    password_hash BINARY(64) NOT NULL,
-    is_admin    -- TODO!
-    user_id     -- autoincrement TODO!
-);
 -- [Problem 1a]
 -- Adds a new user to the user_info table, using the specified password (max
 -- of 20 characters). Salts the password with a newly-generated salt value,
@@ -59,9 +38,24 @@ BEGIN
   -- TODO
 END !
 DELIMITER ;
+
+
+
 -- [Problem 1c]
 -- Add at least two users into your user_info table so that when we run this file,
 -- we will have examples users in the database.
+
+-- TODO
+sp_add_user('sample', 'samplepw');
+-- this update statement allows the data to be correctly loaded into the 
+UPDATE user_info SET user_id = 10000 WHERE username = 'sample';
+
+
+
+-- THIS 
+
+
+
 -- [Problem 1d]
 -- Optional: Create a procedure sp_change_password to generate a new salt and change the given
 -- user's password to the given password (after salting and hashing)

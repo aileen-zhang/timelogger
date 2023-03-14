@@ -1,24 +1,24 @@
-symbol,activity,category,notes
-ln,laundry,housework,
-cl,cleaning,housework,non-clothing tidying
-ca,commissions,paid work,
-eu,event ushering,paid work,
-rt,tutoring,paid work,
-cs11,CS 11,classes,
-cs156,CS 156a,classes,
-ma6,Ma 6a,classes,
-en100,En 100,classes,
-ee111,EE 111,classes,
-me13,ME 13,classes,
-br,bathroom,maintainance,
-ml,meals/snacks,maintainance,
-sl,sleep,maintainance,
-tv,movies/TV/games,leisure,
-www,internet/books,leisure,non-work internet use e.g. webcomics
-soc,socializing,leisure,
-pa,personal art,projects,"includes daily diary, skate maintenance, driving lessons, Leetcode (i.e. self-improvement)"
-mc,mycology club,projects,
-sk8,skate club,projects,
-pw,paperwork/travel,other,"includes flights, Ubers, shopping, etc."
-ap,appointments,other,"psychiatry, therapy, meetings with profs, etc."
-ex,exercise,other,"includes PE class & ""PE"""
+id,activity,category,description,goal
+1,laundry,housework,,0
+2,cleaning,housework,non-clothing tidying,0
+3,commissions,employment,,0
+4,event ushering,employment,,0
+5,tutoring,employment,,0
+6,CS 11,classes,,0
+7,CS 156a,classes,,0
+8,Ma 6a,classes,,0
+9,En 100,classes,,0
+10,EE 111,classes,,0
+11,ME 13,classes,,0
+12,bathroom,self-care,,0
+13,meals/snacks,self-care,,0
+14,sleep,self-care,,-450
+15,movies/TV/games,leisure,,60
+16,internet/books,leisure,non-work internet use e.g. webcomics,0
+17,socializing,leisure,,0
+18,personal art,projects,includes other self-improvement activities,0
+19,mycology club,projects,,0
+20,skate club,projects,,0
+21,paperwork/travel,other,"includes flights, Ubers, shopping, etc.",0
+22,appointments,other,"psychiatry, therapy, meetings with profs, etc.",0
+23,exercise,other,includes PE class & other physical activity,0
