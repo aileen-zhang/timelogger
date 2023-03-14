@@ -4,6 +4,7 @@ Command line application for TimeLogger
 import sys 
 import mysql.connector
 import mysql.connector.errorcode as errorcode
+from getpass import getpass
 
 # TODO: set to false once completed
 DEBUG = True
@@ -51,7 +52,8 @@ def main():
     """
     Main function for starting things up.
     """
-    print('yay!')
+    password = getpass("Enter your password: ")
+    print(password)
 
 
 if __name__ == '__main__':

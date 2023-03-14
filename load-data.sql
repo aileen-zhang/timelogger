@@ -9,7 +9,7 @@ LOAD DATA LOCAL INFILE 'data_f21/task.csv' INTO TABLE user_task
 FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
 (user_id, symbol) SET task_id = NULL;
 
-LOAD DATA LOCAL INFILE 'data_f21/categories.csv' INTO TABLE category
+LOAD DATA LOCAL INFILE 'data_f21/category.csv' INTO TABLE category
 FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
 
 LOAD DATA LOCAL INFILE 'data_f21/key.csv' INTO TABLE activity_key

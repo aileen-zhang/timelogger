@@ -1,5 +1,9 @@
 -- DDL tables for timelog app
 
+-- Create and use database
+CREATE DATABASE IF NOT EXISTS timelogdb;
+USE timelogdb;
+
 -- Remove all tables when setting up from scratch
 DROP TABLE IF EXISTS timelog;
 DROP TABLE IF EXISTS activity_key;
