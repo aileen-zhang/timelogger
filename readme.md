@@ -15,9 +15,7 @@ Place these files in the project directory:
 > setup-routimes.sql
 > setup.sql
 ```
-
 Start the MySQL console and run the following commands:
-
 ```
 mysql> source setup.sql;
 mysql> source setup-passwords.sql;
@@ -198,7 +196,7 @@ Admin tools
 ```
 Select <kbd>1</kbd> to access full select, insert, update, and delete access to all data associated with a user. Select <kbd>2</kbd> to add or remove users, or elevate a client user to an admin. Select <kbd>3</kbd> to export the audit log of user actions.
 
-## Atrribution
+## Attribution
 
 Sample data modified from [Aileen's time log of fall 2021](https://docs.google.com/spreadsheets/d/1NGe55vSQycfRIBiebFc60zmSeRqaMS72zelMbZAtP64/edit?usp=sharing)
 
