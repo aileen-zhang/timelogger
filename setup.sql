@@ -1,10 +1,7 @@
 -- DDL tables for timelog app
 
--- Create and use database
-CREATE DATABASE IF NOT EXISTS timelogdb;
-USE timelogdb;
-
 -- Remove all tables when setting up from scratch
+-- DROP TABLE IF EXISTS audit_log;
 DROP TABLE IF EXISTS timelog;
 DROP TABLE IF EXISTS activity_key;
 DROP TABLE IF EXISTS category;
@@ -19,16 +16,15 @@ CREATE TABLE user_info (
     -- Usernames are up to 20 characters.
     username        VARCHAR(20) NOT NULL,
     -- Salt will be 8 characters all the time, so we can make this 8.
-    salt            CHAR(8), -- NOT NULL,
+    salt            CHAR(8) NOT NULL,
     -- We use SHA-2 with 256-bit hashes.  MySQL returns the hash
     -- value as a hexadecimal string, which means that each byte is
     -- represented as 2 characters.  Thus, 256 / 8 * 2 = 64.
     -- We can use BINARY or CHAR here; BINARY simply has a different
     -- definition for comparison/sorting than CHAR.
-    password_hash   BINARY(64) -- NOT NULL,
-    -- is_admin        -- TODO!
+    password_hash   BINARY(64) NOT NULL,
+    is_admin        BOOLEAN NOT NULL
 );
-
 
 -- Represents possible categories of activity as reference relation
     -- NOTE: this table can only be changed by the admin user
@@ -72,15 +68,19 @@ CREATE TABLE activity_key (
 -- Represents a timestamp with a corresponding entry symbol
 -- Optional attributes: 
 CREATE TABLE timelog (
-    log_time    TIMESTAMP PRIMARY KEY,
-    task_id     BIGINT UNSIGNED NOT NULL,
+    log_time    TIMESTAMP,
+    task_id     BIGINT UNSIGNED,
     note        VARCHAR(100),
     exclude     BOOLEAN DEFAULT FALSE,
+    PRIMARY KEY (log_time, task_id),
     FOREIGN KEY (task_id) REFERENCES user_task(task_id)
 );
 
 -- Represents audit log of when users add or remove data
 -- CREATE TABLE audit_log (
-
+--     audit_id    SERIAL PRIMARY KEY,
+--     audit_time  TIMESTAMP,
+--     user_id     BIGINT UNSIGNED,
+--     FOREIGN KEY (user_id) REFERENCES user_info(user_id)
 -- );
 

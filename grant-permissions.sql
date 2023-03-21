@@ -1,10 +1,12 @@
+-- Create and use database
+CREATE DATABASE IF NOT EXISTS timelogdb;
+USE timelogdb;
+
 -- Create an admin user and a client user in the timelog app
--- IMPORTANT: log in as 'timelogtest' to use the loaded sample data
+CREATE USER IF NOT EXISTS 'timelogadmin'@'localhost' IDENTIFIED BY 'adminpw';
+CREATE USER IF NOT EXISTS 'timelogclient'@'localhost' IDENTIFIED BY 'clientpw';
 
-CREATE USER 'timelogadmin'@'localhost' IDENTIFIED BY 'timelogpass';
-CREATE USER 'timelogclient'@'localhost' IDENTIFIED BY 'clientpw';
-
-CREATE ROLE 'client';
+CREATE ROLE IF NOT EXISTS 'client';
 GRANT SELECT, INSERT, UPDATE ON timelogdb.* TO 'client';
 
 GRANT ALL PRIVILEGES ON timelogdb.* TO 'timelogadmin'@'localhost';

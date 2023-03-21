@@ -1,6 +1,6 @@
 # TimeLogger
 
-TimeLogger is a command line Python application to track and analyze your time usage. TimeLogger supports multiple users and flexible analysis options.
+TimeLogger is a command line Python application to track and analyze your time usage. TimeLogger supports multiple users and flexible analysis options. (Timelogger is under heavy construction.)
 
 ## Setup instructions
 
@@ -8,193 +8,196 @@ TimeLogger is a command line Python application to track and analyze your time u
 
 Place these files in the project directory:
 ```
+> data_f21/
+    > category.csv
+    > key.csv
+    > log.csv
+    > task.csv
 > app.py
 > grant-permissions.sql
+> load-data.sql
 > queries.sql
 > setup-passwords.sql
 > setup-routimes.sql
 > setup.sql
 ```
-Start the MySQL console and run the following commands:
+
+Start the MySQL console with permissions to load local infiles with
+```sh
+sudo mysql --local-infile
 ```
-mysql> source setup.sql;
-mysql> source setup-passwords.sql;
-mysql> source setup-routines.sql;
-mysql> source grant-permissions.sql;
+and run the following commands:
+```sh
+source grant-permissions.sql;
+source setup.sql;
+source setup-passwords.sql;
+source setup-routines.sql;
+source load-data.sql;
 ```
 
-### Sample setup
+These commands will create and initialize the `timelogdb` database; create two database users, `timelogadmin` and `timelogclient`, with passwords `adminpw` and `clientpw` respectively; populate the data tables with the sample data in the `data_f21` folder; and create three aaplication users (more details below).
 
-You may wish to use the included sample data to try out some functionality. The sample data is provided in the folder `data_f21` within the project directory and contains these files:
-```
-> category.csv
-> key.csv
-> log.csv
-> task.csv
-```
-The project directory should also contain the file `load-data.sql`. Run `mysql> source load-data.sql` to populate the tables.
-
-After you have completed setup, `quit` the MySQL console.
+After you have completed setup, `exit` the MySQL console.
 
 ## Using the application
 
-Run `python3 app.py`. Upon success, the command line interface will look like this:
+Run `python3 app.py`. The application will attempt to log in as `timelogadmin`. Upon success, the command line interface will look like this:
 ```
--------------------------------------
-------- Welcome to TimeLogger -------
-The current time is 1/2/23 12:34 pm
+-----------------------------------------------------
+--------------- Welcome to TimeLogger ---------------
+-----------------------------------------------------
+The current time is 2023-03-21 7:16 AM
 
 What would you like to do?
+
 (1) Login
 (X) Exit
--------------------------------------
-
+-----------------------------------------------------
 Choose an option:
 ```
-Press <kbd>1</kbd> <kbd>Enter</kbd> to select the login option. Enter your username and password when prompted. Upon successful login, you will have the following options:
+
+Press <kbd>1</kbd> <kbd>Enter</kbd> to select the login option. There are three preset users:
+
+| username   | password 
+|------------|----------
+| `aileen`     | `azpw`     
+| `testadmin`  | `op`      
+| `testclient` | `nerfed`
+
+Log in as `aileen` to view and manipulate the test data. Upon successful login, you will have the following options:
 
 ```
--------------------------------------
-Welcome back, user
-
-(1) Log existing activity
-(2) View logged data
-(3) View logging options
-(4) Add new activity
-(X) Logout
--------------------------------------
-```
-
-### Log activity
-
-Select <kbd>1</kbd> to log an activity that you have logged before.
-
-```
--------------------------------------
-Choose a category:
-
-(1) Housework
-(2) Employment
-(3) Classes
-(4) Self-Care
-(5) Leisure
-(6) Projects
-(7) Other
-(B) Back
--------------------------------------
-```
-The available activity options will be displayed next to their logging symbol. In this example, we choose <kbd>1</kbd>.
-```
--------------------------------------
-Enter an activity key:
-
-(ln) laundry
-(cl) cleaning
-(B) Back
--------------------------------------
-```
-After selecting an activity, continue to assign it to a time block.
-```
--------------------------------------
-The current time is 1/2/23 12:35 pm
-
-Select a time interval to log:
-
-(1) This 30 minutes
-(2) Last 30 minutes
-(3) Custom
-(B) Back
--------------------------------------
-```
-In this example, <kbd>1</kbd> would log 12:30--12:59 pm and <kbd>2</kbd> would log 12:00--12:29 pm. Select <kbd>3</kbd> to log an arbitrary time interval (in 30-minute increments) within the last 3 days. Note that the date is expressed in `MM/DD/YY` format.
-```
--------------------------------------
-The current time is 1/2/23 12:36 pm
-
-Select start date:
-
-(1) 12/31/22
-(2) 1/1/23
-(3) 1/2/23
--------------------------------------
-```
-In this example, we select option <kbd>2</kbd>. The entered time will be rounded to the nearest half-hour.
-
-```
--------------------------------------
-The current time is 1/2/23 12:36 pm
-
-Enter start time on 1/1/23
-in HH:MM format
--------------------------------------
-
-Enter start time: 15:25
-```
-Repeat the above steps for the end time. NOTE: currently does not support overwriting previously logged times!
-
-
-### View and export log
-
-GRAPHICAL REPRESENTATIONS NOT YET IMPLEMENTED
-
-### View and export analyses
-
-
-
-#### General statistics
-
-#### Sleep statistics
-
-
-### View trackable activities
-
-
-
-### Add activity
-
-
-
-
-### Exiting the application
-
-Navigate back to the home screen and select <kbd>X</kbd>, or enter `exit` at any time. Confirm your choice with <kbd>Y</kbd>. Hit any other key to return to the previous menu.
-
-```
-Choose an option: exit
-----
-Are you sure you want to log out and exit? y
-----
-Thanks for using TimeLogger!
-```
-
-## Admin options
-
-Upon login with an admin account, you will see this menu. Notice the addition of the `Admin tools` option.
-
-```
--------------------------------------
-Welcome back, admin!
+-----------------------------------------------------
+Welcome back, aileen
 
 (0) Admin tools
 (1) Log existing activity
 (2) View logged data
-(3) View logging options
-(4) Add new activity
+(3) View reports
+(4) View logging options
+(5) Add new activity
 (X) Logout
--------------------------------------
+-----------------------------------------------------
 ```
-The available tools are as follows:
-```
--------------------------------------
-Admin tools
 
-(1) Superuser account
-(2) Modify user
-(3) Export logs
-(B) Back
--------------------------------------
+
+### Navigational structure
+
+Navigate the menus by selecting the relevant option code. The options indicated with `(_)` are data entry fields.
 ```
-Select <kbd>1</kbd> to access full select, insert, update, and delete access to all data associated with a user. Select <kbd>2</kbd> to add or remove users, or elevate a client user to an admin. Select <kbd>3</kbd> to export the audit log of user actions.
+(1) Login    
+    (_) Username 
+    (_) Password
+    (0) Admin tools  
+        (1) Superuser account (UNDER CONSTRUCTION)
+        (2) Modify user
+            (1) Add user
+                (_) New username
+                (_) New password
+                (_) Admin status
+            (2) Remove user (UNDER CONSTRUCTION)
+            (3) Change privileges (UNDER CONSTRUCTION)
+            (B) Back
+        (3) Export logs (UNDER CONSTRUCTION)
+        (B) Back
+    (1) Log existing activity
+        (#) Choose category
+        (#) Choose activity
+            (1) This 30 minutes
+            (2) Last 30 minutes
+            (3) Custom time range (UNDER CONSTRUCTION)
+            (B) Back to <Home>
+    (2) View logged data (UNDER CONSTRUCTION)
+    (3) View reports
+        (1) Sleep statistics
+            (0) Summary
+            (1) Bedtime
+            (2) Wake time
+            (3) Sleep duration
+            (4) Sleep goals
+            (B) Back
+        (2) Activity statistics (UNDER CONSTRUCTION)
+        (B) Back
+    (4) View logging options (UNDER CONSTRUCTION)
+    (5) Add new activity
+        (#) Choose category
+            (_) Activity name
+            (_) Logging symbol
+            (_) Optional description
+            (_) Optional goal time
+    (X) Logout
+(X) Exit
+```
+Follow the prompts to interact with the application.
+
+
+### Log activity
+
+Select this option to log an activity that you have logged before. In this example, let's log doing laundry for the last 30 minutes.
+
+```
+-----------------------------------------------------
+Choose a category:
+
+(1) classes
+(2) employment
+(3) housework
+(4) leisure
+(5) other
+(6) projects
+(7) self-care
+-----------------------------------------------------
+```
+The available activity options will be displayed next to their logging symbol. In this example, we choose <kbd>3</kbd>.
+```
+-----------------------------------------------------
+Choose an activity in the housework category:
+
+(ln) laundry
+(cl) cleaning
+-----------------------------------------------------
+```
+After selecting an activity, continue to assign it to a time block.
+```
+-----------------------------------------------------
+The current time is 2023-03-21 7:18 AM
+
+Choose a time to log:
+
+(1) This 30 minutes
+(2) Last 30 minutes
+(3) Custom time range
+(B) Back to home
+-----------------------------------------------------
+```
+
+
+### View reports
+Select this option to view analyses of previously logged data.
+
+#### Sleep statistics
+Sleep is a default activity for every new user, and can be logged using the `sl` symbol. Currently, the summary option takes in a date and shows the bedtime of the night before, the wake time of the day of, the sleep duration in between, and whether your sleep goal was achieved.
+
+
+#### Activity statistics
+Views of activity statistics will be added soon.
+
+
+### Add new activity
+
+Select this option to add new activities to your logging options. After following the prompts, your new activity will be available to log upon return to the home screen.
+
+
+### Exiting the application
+
+Navigate back to the home screen and select <kbd>X</kbd>, or enter `exit` at any time. Confirm your choice with <kbd>y</kbd>. Hit any other key to return to the previous menu.
+
+
+## Admin options
+
+Admin accounts have access to the `Admin tools` option. Currently, admins can add new admin and client users.
+
+Eventually, features will be added to allow admins to select, insert, update, and delete data associated with any user; remove users; elevate a client user to an admin; and export the audit log of user actions.
 
 ## Attribution
 
