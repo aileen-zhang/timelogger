@@ -3,7 +3,6 @@
 TimeLogger is a command line Python application to track and analyze your time usage. TimeLogger supports multiple users and flexible analysis options. (Timelogger is under heavy construction.)
 
 
-
 #### Required files
 
 Place these files in the project directory:
@@ -60,8 +59,8 @@ Choose an option:
 
 Press <kbd>1</kbd> <kbd>Enter</kbd> to select the login option. There are three preset users:
 
-| username   | password 
-|------------|----------
+| username     | password 
+|--------------|----------
 | `aileen`     | `azpw`     
 | `testadmin`  | `op`      
 | `testclient` | `nerfed`
@@ -82,13 +81,13 @@ Welcome back, aileen
 -----------------------------------------------------
 ```
 
-##### Exiting the application
+#### Exiting the application
 
 Navigate back to the home screen and select <kbd>X</kbd>, or enter `exit` at any time. Confirm your choice with <kbd>y</kbd>. Hit any other key to return to the previous menu.
 
-### Menu structure
+## Menu structure
 
-Navigate the menus by selecting the relevant option code. The options indicated with `(_)` are data entry fields.
+Navigate the menus by selecting the relevant option code (case-sensitive). The options indicated with `(_)` are data entry fields.
 ```
 (1) Login    
     (_) Username 
@@ -130,10 +129,10 @@ Navigate the menus by selecting the relevant option code. The options indicated 
     (X) Logout
 (X) Exit
 ```
-Follow the prompts to interact with the application. Options labeled `(UNDER CONSTRUCTION)` are not yet available.
+Follow the prompts to interact with the application. Options labeled `(UNDER CONSTRUCTION)` are not yet available. Consult the more complete navigation structure of `app.py` to see what additional features are planned.
 
 
-#### Log activity
+### Log activity
 
 Select this option to log an activity that you have defined before. In this example, we'll log doing laundry for the last 30 minutes.
 
@@ -174,10 +173,10 @@ Activity has been logged if not indicated otherwise
 Right now, the application supports logging the 30 minutes including the current time and the 30 minutes before that. For example, if it is 7:18 AM, `This 30 minutes` is the block from 7:00 - 7:29, and `Last 30 minutes` is the block from 6:30 - 6:59.
 
 
-#### View reports
+### View reports
 Select this option to view analyses of previously logged data. A user gets reports about their own logged entries.
 
-##### Sleep statistics
+#### Sleep statistics
 Sleep is a default activity for every new user, and can be logged using the `sl` symbol. Currently, the summary option takes in a date and shows the bedtime of the night before, the wake time of the day of, the sleep duration in between, and whether your sleep goal was achieved. See `setup-routines.sql` for how bedtimes, sleep duration, and wake times are calculated.
 
 Here is an example output for the day `2021-10-29`.
@@ -197,12 +196,13 @@ Sleep duration : 600 minutes
 You met your sleep goal
 -----------------------------------------------------
 ```
+Data exists for dates between `2021-09-27` and `2021-12-10`.
 
-##### Activity statistics
+#### Activity statistics
 Activity-specific statistics will be added soon. The functionality will be very similar to the sleep tracking statistics. There will also be an option to view category aggregate times.
 
 
-#### Add new activity
+### Add new activity
 
 Select this option to add new activities to log. After following the prompts, your new activity will be available to log upon returning to the home screen. For example, these are the new activity log options after adding Intro to Databases with the symbol `cs121`.
 
