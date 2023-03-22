@@ -537,13 +537,27 @@ def sleep_summary():
     Displays data summary of sleep stats for a selected day
     '''
     d = sleep_date_input()
-    bt_query = """SELECT bedtime('%s', %s), ;"""%(d, user_id)
-    bt_raw = execute_query(bt_query, "Bedtime calculation failed!")
-    bt = bt_raw[0][0]
-    if bt == None:
-        bt = "not logged"
+    sleep_query = f"""SELECT bedtime('{d}', {user_id}), 
+                             wake_time('{d}', {user_id}),
+                             sleep_duration('{d}', {user_id}),
+                             sleep_goal_met('{d}', {user_id});"""
+    sleep_raw = execute_query(sleep_query, "Sleep calculation failed!")
+    bt, wt, sd, sg = sleep_raw[0]
+    def logchk(v):
+        if v == None:
+            return "not logged"
+        return v
+    if sg == 1:
+        gmsg = 'met'
+    else:
+        gmsg = 'did not meet'
     print(DASHES)
-    print(f'Your bedtime on {time} was {bt}')
+    print(f"Sleep statistics for {d}")
+    print()
+    print(f'Bedtime        : {logchk(bt)}')
+    print(f'Wake time      : {logchk(wt)}')
+    print(f'Sleep duration : {logchk(sd)} minutes')
+    print(f'You {gmsg} your sleep goal')
     sleep_reports()
     
 
@@ -556,7 +570,7 @@ def bedtime():
     if bt == None:
         bt = "not logged"
     print(DASHES)
-    print(f'Your bedtime on {time} was {bt}')
+    print(f'Your bedtime on {d} was {bt}')
     sleep_reports()
 
 
@@ -620,7 +634,7 @@ def custom_times():
 # Viewing functions
 # ----------------------------------------------------------------------
 
-# TODO
+# to be implemented in CS 132
 
 # ----------------------------------------------------------------------
 # Activity key functions

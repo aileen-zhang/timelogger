@@ -84,3 +84,4 @@ CREATE TABLE timelog (
 --     FOREIGN KEY (user_id) REFERENCES user_info(user_id)
 -- );
 
+-- TODO add index

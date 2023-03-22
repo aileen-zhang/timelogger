@@ -64,13 +64,13 @@ END !
     
     -- BEDTIME is calculated as the date-agnostic time at the beginning of the 
     -- longest block of contiguous sleep entries starting after noon on the 
-    -- given day and ending before 11:59 PM on the next day
+    -- previous day and ending before 11:59 PM on the given day
     
-    -- WAKE TIME is calculated as end of contiguous sleep entries ending on 
-    -- the given day, possibly starting on the previous day
+    -- WAKE TIME is calculated as end of the longest contiguous block of sleep 
+    -- entries ending on the given day, possibly starting on the previous day
    
     -- SLEEP DURATION is calculated as the number of sleep entries between the
-    -- bedtime of that day and the wake time of the next day
+    -- bedtime the wake time the given day
 
 -- EXAMPLE SLEEP LOG VALUES:
     -- SLEEP START | SLEEP END
@@ -83,10 +83,9 @@ END !
 -- EXAMPLE RESULTS:
     -- DATE  | BEDTIME | WAKE TIME | SLEEP DURATION
     -- ----------------------------------------------
-    -- 12/31 | 2 AM    | N/A       | 8 HRS
-    -- 1/1   | 11 PM   | 10 AM     | 9 HRS
-    -- 1/2   | 12 AM   | 8 AM      | 7 HRS
-    -- 1/3   | N/A     | 7 AM      | N/A
+    -- 1/1   | 2 AM    | 10 AM     | 8 HRS
+    -- 1/2   | 11 PM   | 8 AM      | 9 HRS
+    -- 1/3   | 12 AM   | 7 AM      | 7 HRS
 
 -- helper functions to get noon and just-before midnight on a given day
 CREATE FUNCTION IF NOT EXISTS get_noon (d DATE) RETURNS TIMESTAMP DETERMINISTIC
@@ -120,7 +119,7 @@ BEGIN
     DECLARE cur CURSOR FOR 
         SELECT log_time, task_id FROM user_task NATURAL JOIN
             (SELECT * FROM timelog
-            WHERE log_time BETWEEN get_noon(d) AND get_mn(DATE_ADD(d, INTERVAL 1 DAY))) t
+            WHERE log_time BETWEEN get_noon(DATE_SUB(d, INTERVAL 1 DAY)) AND get_mn(d)) t
         WHERE user_id = uid
         ORDER BY log_time DESC;
 
@@ -135,7 +134,7 @@ BEGIN
     SELECT COUNT(*) INTO slept 
         FROM timelog 
         WHERE task_id = tid
-        AND log_time BETWEEN get_noon(d) AND get_mn(DATE_ADD(d, INTERVAL 1 DAY));
+        AND log_time BETWEEN get_noon(DATE_SUB(d, INTERVAL 1 DAY)) AND get_mn(d);
     IF slept = 0 THEN
         RETURN NULL;
     END IF;
@@ -278,7 +277,7 @@ BEGIN
     DECLARE cur CURSOR FOR 
         SELECT task_id FROM user_task NATURAL JOIN
             (SELECT * FROM timelog
-            WHERE log_time BETWEEN get_noon(d) AND get_mn(DATE_ADD(d, INTERVAL 1 DAY))) t
+            WHERE log_time BETWEEN get_noon(DATE_SUB(d, INTERVAL 1 DAY)) AND get_mn(d)) t
         WHERE user_id = uid
         ORDER BY log_time DESC;
 
@@ -293,7 +292,7 @@ BEGIN
     SELECT COUNT(*) INTO slept 
         FROM timelog 
         WHERE task_id = tid
-        AND log_time BETWEEN get_noon(d) AND get_mn(DATE_ADD(d, INTERVAL 1 DAY));
+        AND log_time BETWEEN get_noon(DATE_SUB(d, INTERVAL 1 DAY)) AND get_mn(d);
     IF slept = 0 THEN
         RETURN NULL;
     END IF;
@@ -420,7 +419,7 @@ END !
 -- Trigger to update audit_log and track when users perform actions
 -- CREATE TRIGGER log_user_insert AFTER INSERT
 -- BEGIN
---     -- TODO!!!
+--      to be implemented later
 -- END !
 
 DELIMITER ;

@@ -35,7 +35,7 @@ source setup-routines.sql;
 source load-data.sql;
 ```
 
-These commands will create and initialize the `timelogdb` database; create two database users, `timelogadmin` and `timelogclient`, with passwords `adminpw` and `clientpw` respectively; populate the data tables with the sample data in the `data_f21` folder; and create three aaplication users (more details below).
+These commands will create and initialize the `timelogdb` database; create two database users, `timelogadmin` and `timelogclient`, with passwords `adminpw` and `clientpw` respectively; populate the data tables with the sample data in the `data_f21` folder; and create three application users (more details below).
 
 After you have completed setup, `exit` the MySQL console.
 
@@ -157,8 +157,8 @@ Choose an activity in the housework category:
 (cl) cleaning
 -----------------------------------------------------
 ```
-After selecting an activity, continue to assign it to a time block.
-```
+After entering `ln`, continue to assign it to a time block.
+``` 
 -----------------------------------------------------
 The current time is 2023-03-21 7:18 AM
 
@@ -170,22 +170,55 @@ Choose a time to log:
 (B) Back to home
 -----------------------------------------------------
 ```
+Right now, the application supports logging the 30 minutes including the current time and the 30 minutes before that. For example, if it is 7:18 AM, `This 30 minutes` is the block from 7:00 - 7:29, and `Last 30 minutes` is the block from 6:30 - 6:59.
 
 
 ### View reports
-Select this option to view analyses of previously logged data.
+Select this option to view analyses of previously logged data. A user can only see their own logged entries.
 
 #### Sleep statistics
-Sleep is a default activity for every new user, and can be logged using the `sl` symbol. Currently, the summary option takes in a date and shows the bedtime of the night before, the wake time of the day of, the sleep duration in between, and whether your sleep goal was achieved.
+Sleep is a default activity for every new user, and can be logged using the `sl` symbol. Currently, the summary option takes in a date and shows the bedtime of the night before, the wake time of the day of, the sleep duration in between, and whether your sleep goal was achieved. See `setup-routines.sql` for how bedtimes, sleep duration, and wake times are calculated.
 
+Here is an example output for the day `2021-10-29`.
+
+```
+-----------------------------------------------------
+Select (T) to see the most recent statistics
+or enter a date in YYYY-MM-DD format
+-----------------------------------------------------
+Enter [T] or date of interest: 2021-10-29
+-----------------------------------------------------
+Sleep statistics for 2021-10-29
+
+Bedtime        : 0:30:00
+Wake time      : 10:30:00
+Sleep duration : 600 minutes
+You met your sleep goal
+-----------------------------------------------------
+
+```
 
 #### Activity statistics
-Views of activity statistics will be added soon.
+Views of activity statistics will be added soon. The functionality will be very similar to the sleep tracking statistics. There will also be an option to view category aggregate times.
 
 
 ### Add new activity
 
-Select this option to add new activities to your logging options. After following the prompts, your new activity will be available to log upon return to the home screen.
+Select this option to add new activities to log. After following the prompts, your new activity will be available to log upon returning to the home screen. For example, these are the new activity log options after adding Intro to Databases with the symbol `cs121`.
+
+```
+-----------------------------------------------------
+Choose an activity in the classes category:
+
+(cs11) CS 11
+(cs156) CS 156a
+(ma6) Ma 6a
+(en100) En 100
+(ee111) EE 111
+(me13) ME 13
+(cs121) Intro to Databases
+-----------------------------------------------------
+```
 
 
 ### Exiting the application
@@ -195,7 +228,7 @@ Navigate back to the home screen and select <kbd>X</kbd>, or enter `exit` at any
 
 ## Admin options
 
-Admin accounts have access to the `Admin tools` option. Currently, admins can add new admin and client users.
+Admin accounts have access to the `Admin tools` option. Currently, admins can add new admin and client users. Follow the prompts to enter the new user's username, password, and admin status.
 
 Eventually, features will be added to allow admins to select, insert, update, and delete data associated with any user; remove users; elevate a client user to an admin; and export the audit log of user actions.
 
