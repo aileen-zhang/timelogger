@@ -167,7 +167,7 @@ Choose a time to log:
 (B) Back to home
 -----------------------------------------------------
 Choose an option: 2
-Activity has been logged if not indicated otherwise
+Activity has been logged
 -----------------------------------------------------
 ```
 Right now, the application supports logging the 30 minutes including the current time and the 30 minutes before that. For example, if it is 7:18 AM, `This 30 minutes` is the block from 7:00 - 7:29, and `Last 30 minutes` is the block from 6:30 - 6:59.
