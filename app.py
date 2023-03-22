@@ -16,8 +16,8 @@ import datetime
 # Global variables
 # ----------------------------------------------------------------------
 
-# TODO: set to false once completed
-DEBUG = True
+# NOTE: set to True for debugging
+DEBUG = False
 
 # ----------------------------------------------------------------------
 # Pretty-printing assets
@@ -91,12 +91,15 @@ def choose_category():
     print("Choose a category:")
     print()
     cat_query = """SELECT category_name FROM category;"""
-    raw_cats = execute_query(cat_query, "Categories not retrieved!")
-    categories = [c[0] for c in raw_cats]
-    valid_values = generate_print_opts(categories)
-    print(DASHES)
-    r = choose_opt_input(valid_values)
-    return r, categories
+    raw_cats = execute_query(cat_query, "Categories not retrieved! Returning to home")
+    if raw_cats == None:
+        home_menu()
+    else:
+        categories = [c[0] for c in raw_cats]
+        valid_values = generate_print_opts(categories)
+        print(DASHES)
+        r = choose_opt_input(valid_values)
+        return r, categories
 
 def choose_activity(cat):
     '''
@@ -109,18 +112,21 @@ def choose_activity(cat):
                    FROM user_task NATURAL JOIN activity_key
                    WHERE category_name = '%s'
                    AND user_id = %s;""" % (cat, user_id)
-    raw_acts = execute_query(act_query, "Activities not retrieved!")
-    valid_values = []
-    for sym, name in raw_acts:
-        legend_text(sym, name)
-        valid_values.append(sym)
-    if len(valid_values) == 0:
-        print('No available activities in this category')
-        print("Returning to home menu")
+    raw_acts = execute_query(act_query, "Activities not retrieved! Returning to home")
+    if raw_acts == None:
         home_menu()
-    print(DASHES)
-    s = choose_opt_input(valid_values)
-    return s
+    else:
+        valid_values = []
+        for sym, name in raw_acts:
+            legend_text(sym, name)
+            valid_values.append(sym)
+        if len(valid_values) == 0:
+            print('No available activities in this category')
+            print("Returning to home menu")
+            home_menu()
+        print(DASHES)
+        s = choose_opt_input(valid_values)
+        return s
 
 # ----------------------------------------------------------------------
 # Option menu lists
@@ -143,7 +149,7 @@ sleep_opt = ["Bedtime", "Wake time", "Sleep duration", "Sleep goals"]
 # SQL Utility Functions
 # ----------------------------------------------------------------------
 def get_conn():
-    '''"
+    '''
     Returns a connected MySQL connector instance, if connection is successful.
     If unsuccessful, exits.
     '''
@@ -171,6 +177,9 @@ def get_conn():
         sys.exit(1)
 
 def execute_query(query, err_msg):
+    ''' 
+    Execute query and return results, or print error message and return nothing
+    '''
     try:
         cursor = conn.cursor()
         cursor.execute(query)
@@ -180,11 +189,14 @@ def execute_query(query, err_msg):
             sys.stderr(err)
             sys.exit(1)
         else:
-            sys.stderr(err_msg)
+            print(err_msg)
             return
     return rows
 
 def execute_proc(proc, args, err_msg):
+    '''
+    Execute stored procedure and return True if successful
+    '''
     try:
         cursor = conn.cursor()
         cursor.callproc(proc, args)
@@ -195,7 +207,7 @@ def execute_proc(proc, args, err_msg):
             sys.stderr(err)
             sys.exit(1)
         else:
-            sys.stderr(err_msg)
+            print(err_msg)
             return False
 # ----------------------------------------------------------------------
 # Navigation menus
@@ -233,11 +245,9 @@ Layers:
         (B) Back
     (1) Log existing activity
         (#) Choose category
-            (#) Choose activity
-                (#) Choose time format
-                (B) Back
-            (B) Back
-        (B) Back
+        (#) Choose activity
+            (#) Choose time format
+            (B) Back to <Home>
     (2) View logged data
         (1) ??
     (3) View reports
@@ -250,18 +260,17 @@ Layers:
             (B) Back
         (2) Activity statistics
             (1) Specific activity
+                (#) Choose category
                 (#) Choose activity
                     (1) Dates of interest
                     (2) Averages
                     (3) Goals
-                    (B) Back
-                (B) Back
+                    (B) Back to <Activity statistics>
             (2) Category aggregates
                 (#) Choose category
                     (1) Dates of interest
                     (2) Averages
-                    (B) Back
-                (B) Back
+                    (B) Back to <Activity statistics>
             (B) Back
         (B) Back
     (4) View logging options
@@ -311,18 +320,23 @@ def login():
     password = getpass("Enter your password: ")
     login_query = "SELECT authenticate('%s', '%s');" % (username_ipt, password)
     success = execute_query(login_query, 'Login error!')
-    if success[0][0]:
+    if success == None:
+        start_menu()
+    elif success[0][0]:
         username = username_ipt
         info_query = """
                 SELECT user_id, is_admin FROM user_info 
                 WHERE username = '%s';""" % (username)
         info_chk = execute_query(info_query, 'Info check error!')
-        if info_chk[0][1]:
-            is_admin = True
+        if info_chk == None:
+            start_menu()
         else:
-            is_admin = False
-        user_id = info_chk[0][0]
-        home_menu()
+            if info_chk[0][1]:
+                is_admin = True
+            else:
+                is_admin = False
+            user_id = info_chk[0][0]
+            home_menu()
     else:
         print(DASHES)
         print('Invalid credentials! Try again')
@@ -331,6 +345,9 @@ def login():
 ######## LAYER 1: HOME MENUS ########
 
 def home_menu():
+    '''
+    Home menu that displays Admin options if is_admin = True
+    '''
     print(DASHES)
     print("Welcome back,", username)
     print()
@@ -371,6 +388,9 @@ def home_navigation(choice):
 ######## LAYER 2+: ADMIN TOOLS ########
 
 def admin_tools():
+    '''
+    Main menu for admin tools: superuser, modify user, export logs
+    '''
     print(DASHES)
     print("Admin tools")
     print()
@@ -398,6 +418,9 @@ def admin_navigation(choice):
             admin_navigation(r)
 
 def modify_user():
+    '''
+    Menu to modify users: add user, remove user, change admin status
+    '''
     print(DASHES)
     print("Modify user")
     print()
@@ -429,6 +452,9 @@ def usermod_navigation(choice):
 ######## LAYER 2+: LOG ACTIVITY ########
 
 def log_activity():
+    '''
+    Take user inputs and update timelog
+    '''
     r, cats = choose_category()
     category = cats[int(r) - 1]
     s = choose_activity(category)
@@ -458,14 +484,18 @@ def log_activity():
                 not_valid_msg()
                 choice = choose_opt_input(valid_values)
     if ts:
-        execute_proc('log_entry', (user_id, s, ts), "Logging unsuccessful!")
-        print('Activity has been logged if not indicated otherwise')
+        chk = execute_proc('log_entry', (user_id, s, ts), "Logging failed!")
+        if chk:
+            print('Activity has been logged')
     home_menu()
 
 
 ######## LAYER 2+: VIEW REPORTS ########
 
 def view_reports():
+    '''
+    Main menu for report and statistics generation: sleep, activity
+    '''
     print(DASHES)
     print("View reports")
     print()
@@ -491,6 +521,9 @@ def report_navigation(choice):
             report_navigation(r)
 
 def sleep_reports():
+    '''
+    Menu for sleep reports: summary, specific results
+    '''
     print(DASHES)
     print("Sleep statistics")
     print()
@@ -507,8 +540,8 @@ def sleep_navigation(choice):
     match choice:
         case '0':
             sleep_summary()
-        case '1':
-            bedtime()
+        # case '1':
+        #     bedtime()
         # case '2':
         #     wake_time()
         # case '3':
@@ -524,6 +557,9 @@ def sleep_navigation(choice):
             sleep_navigation(r)
 
 def sleep_date_input():
+    '''
+    Helper function for YYYY-MM-DD date entry
+    '''
     print(DASHES)
     print("Select (T) to see the most recent statistics\nor enter a date in YYYY-MM-DD format")
     print(DASHES)      
@@ -542,36 +578,38 @@ def sleep_summary():
                              sleep_duration('{d}', {user_id}),
                              sleep_goal_met('{d}', {user_id});"""
     sleep_raw = execute_query(sleep_query, "Sleep calculation failed!")
-    bt, wt, sd, sg = sleep_raw[0]
-    def logchk(v):
-        if v == None:
-            return "not logged"
-        return v
-    if sg == 1:
-        gmsg = 'met'
-    else:
-        gmsg = 'did not meet'
-    print(DASHES)
-    print(f"Sleep statistics for {d}")
-    print()
-    print(f'Bedtime        : {logchk(bt)}')
-    print(f'Wake time      : {logchk(wt)}')
-    print(f'Sleep duration : {logchk(sd)} minutes')
-    print(f'You {gmsg} your sleep goal')
+    if sleep_raw != None:
+        bt, wt, sd, sg = sleep_raw[0]
+        def logchk(v):
+            if v == None:
+                return "not logged"
+            return v
+        if sg == 1:
+            gmsg = 'met'
+        else:
+            gmsg = 'did not meet'
+        print(DASHES)
+        print(f"Sleep statistics for {d}")
+        print()
+        print(f'Bedtime        : {logchk(bt)}')
+        print(f'Wake time      : {logchk(wt)}')
+        print(f'Sleep duration : {logchk(sd)} minutes')
+        print(f'You {gmsg} your sleep goal')
     sleep_reports()
     
 
+# NOTE: specific category analyses will have additional time range options
 
-def bedtime():
-    d = sleep_date_input()
-    bt_query = """SELECT bedtime('%s', %s);"""%(d, user_id)
-    bt_raw = execute_query(bt_query, "Bedtime calculation failed!")
-    bt = bt_raw[0][0]
-    if bt == None:
-        bt = "not logged"
-    print(DASHES)
-    print(f'Your bedtime on {d} was {bt}')
-    sleep_reports()
+# def bedtime():
+#     d = sleep_date_input()
+#     bt_query = """SELECT bedtime('%s', %s);"""%(d, user_id)
+#     bt_raw = execute_query(bt_query, "Bedtime calculation failed!")
+#     bt = bt_raw[0][0]
+#     if bt == None:
+#         bt = "not logged"
+#     print(DASHES)
+#     print(f'Your bedtime on {d} was {bt}')
+#     sleep_reports()
 
 
 # ----------------------------------------------------------------------
@@ -584,6 +622,8 @@ def round_half_hr(timestamp):
     Round down the given value to the nearest half hour
     '''
     return timestamp - (timestamp - dt.min) % datetime.timedelta(minutes=30)
+
+# NOTE: integration with activity logging coming later
 
 def custom_times():
     '''
@@ -634,13 +674,12 @@ def custom_times():
 # Viewing functions
 # ----------------------------------------------------------------------
 
-# to be implemented in CS 132
+# NOTE: to be implemented in CS 132
 
 # ----------------------------------------------------------------------
 # Activity key functions
 # ----------------------------------------------------------------------
 
-# NOTE: this is the only function necessary for (5) Add new activity
 def add_activity():
     ''' 
     Prompt user for category of new activity, collect query arguments, and
@@ -703,6 +742,9 @@ def new_user():
     success = execute_proc('sp_add_user', args, "Failed to add user")
     if success:
         print(f"New user {new_un} added")
+
+
+# NOTE: will be used for superuser functionality later
 
 # def select_user():
 #     users = ['test1', 'test2']

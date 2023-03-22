@@ -17,17 +17,13 @@ CREATE TABLE user_info (
     username        VARCHAR(20) NOT NULL,
     -- Salt will be 8 characters all the time, so we can make this 8.
     salt            CHAR(8) NOT NULL,
-    -- We use SHA-2 with 256-bit hashes.  MySQL returns the hash
-    -- value as a hexadecimal string, which means that each byte is
-    -- represented as 2 characters.  Thus, 256 / 8 * 2 = 64.
-    -- We can use BINARY or CHAR here; BINARY simply has a different
-    -- definition for comparison/sorting than CHAR.
+    -- We use SHA-2 with 256-bit hashes.
     password_hash   BINARY(64) NOT NULL,
     is_admin        BOOLEAN NOT NULL
 );
 
 -- Represents possible categories of activity as reference relation
-    -- NOTE: this table can only be changed by the admin user
+    -- NOTE: for now, this table cannot be modified by the application
 CREATE TABLE category (
     -- fixed list of categories determined at database setup
     category_name   VARCHAR(20) PRIMARY KEY,
@@ -66,7 +62,8 @@ CREATE TABLE activity_key (
 );
 
 -- Represents a timestamp with a corresponding entry symbol
--- Optional attributes: 
+-- Optional attributes: add a note or choose to exclude entry
+-- NOTE: no interface to add notes yet
 CREATE TABLE timelog (
     log_time    TIMESTAMP,
     task_id     BIGINT UNSIGNED,
@@ -76,6 +73,7 @@ CREATE TABLE timelog (
     FOREIGN KEY (task_id) REFERENCES user_task(task_id)
 );
 
+-- NOTE: not implemented yet
 -- Represents audit log of when users add or remove data
 -- CREATE TABLE audit_log (
 --     audit_id    SERIAL PRIMARY KEY,
@@ -84,4 +82,4 @@ CREATE TABLE timelog (
 --     FOREIGN KEY (user_id) REFERENCES user_info(user_id)
 -- );
 
--- TODO add index
+CREATE INDEX goal_index ON activity_key (goal_time);

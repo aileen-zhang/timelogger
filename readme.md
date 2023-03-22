@@ -2,9 +2,9 @@
 
 TimeLogger is a command line Python application to track and analyze your time usage. TimeLogger supports multiple users and flexible analysis options. (Timelogger is under heavy construction.)
 
-## Setup instructions
 
-### Required files
+
+#### Required files
 
 Place these files in the project directory:
 ```
@@ -21,6 +21,7 @@ Place these files in the project directory:
 > setup-routimes.sql
 > setup.sql
 ```
+## Setup instructions
 
 Start the MySQL console with permissions to load local infiles with
 ```sh
@@ -28,6 +29,7 @@ sudo mysql --local-infile
 ```
 and run the following commands:
 ```sh
+SET GLOBAL local_infile = true; -- needed to load data
 source grant-permissions.sql;
 source setup.sql;
 source setup-passwords.sql;
@@ -80,8 +82,11 @@ Welcome back, aileen
 -----------------------------------------------------
 ```
 
+##### Exiting the application
 
-### Navigational structure
+Navigate back to the home screen and select <kbd>X</kbd>, or enter `exit` at any time. Confirm your choice with <kbd>y</kbd>. Hit any other key to return to the previous menu.
+
+### Menu structure
 
 Navigate the menus by selecting the relevant option code. The options indicated with `(_)` are data entry fields.
 ```
@@ -111,10 +116,7 @@ Navigate the menus by selecting the relevant option code. The options indicated 
     (3) View reports
         (1) Sleep statistics
             (0) Summary
-            (1) Bedtime
-            (2) Wake time
-            (3) Sleep duration
-            (4) Sleep goals
+            (#) Specific category analyses (UNDER CONSTRUCTION)
             (B) Back
         (2) Activity statistics (UNDER CONSTRUCTION)
         (B) Back
@@ -128,12 +130,12 @@ Navigate the menus by selecting the relevant option code. The options indicated 
     (X) Logout
 (X) Exit
 ```
-Follow the prompts to interact with the application.
+Follow the prompts to interact with the application. Options labeled `(UNDER CONSTRUCTION)` are not yet available.
 
 
-### Log activity
+#### Log activity
 
-Select this option to log an activity that you have logged before. In this example, let's log doing laundry for the last 30 minutes.
+Select this option to log an activity that you have defined before. In this example, we'll log doing laundry for the last 30 minutes.
 
 ```
 -----------------------------------------------------
@@ -147,18 +149,14 @@ Choose a category:
 (6) projects
 (7) self-care
 -----------------------------------------------------
-```
-The available activity options will be displayed next to their logging symbol. In this example, we choose <kbd>3</kbd>.
-```
+Choose an option: 3
 -----------------------------------------------------
 Choose an activity in the housework category:
 
 (ln) laundry
 (cl) cleaning
 -----------------------------------------------------
-```
-After entering `ln`, continue to assign it to a time block.
-``` 
+Choose an option: ln
 -----------------------------------------------------
 The current time is 2023-03-21 7:18 AM
 
@@ -169,14 +167,17 @@ Choose a time to log:
 (3) Custom time range
 (B) Back to home
 -----------------------------------------------------
+Choose an option: 2
+Activity has been logged if not indicated otherwise
+-----------------------------------------------------
 ```
 Right now, the application supports logging the 30 minutes including the current time and the 30 minutes before that. For example, if it is 7:18 AM, `This 30 minutes` is the block from 7:00 - 7:29, and `Last 30 minutes` is the block from 6:30 - 6:59.
 
 
-### View reports
-Select this option to view analyses of previously logged data. A user can only see their own logged entries.
+#### View reports
+Select this option to view analyses of previously logged data. A user gets reports about their own logged entries.
 
-#### Sleep statistics
+##### Sleep statistics
 Sleep is a default activity for every new user, and can be logged using the `sl` symbol. Currently, the summary option takes in a date and shows the bedtime of the night before, the wake time of the day of, the sleep duration in between, and whether your sleep goal was achieved. See `setup-routines.sql` for how bedtimes, sleep duration, and wake times are calculated.
 
 Here is an example output for the day `2021-10-29`.
@@ -195,14 +196,13 @@ Wake time      : 10:30:00
 Sleep duration : 600 minutes
 You met your sleep goal
 -----------------------------------------------------
-
 ```
 
-#### Activity statistics
-Views of activity statistics will be added soon. The functionality will be very similar to the sleep tracking statistics. There will also be an option to view category aggregate times.
+##### Activity statistics
+Activity-specific statistics will be added soon. The functionality will be very similar to the sleep tracking statistics. There will also be an option to view category aggregate times.
 
 
-### Add new activity
+#### Add new activity
 
 Select this option to add new activities to log. After following the prompts, your new activity will be available to log upon returning to the home screen. For example, these are the new activity log options after adding Intro to Databases with the symbol `cs121`.
 
@@ -220,17 +220,54 @@ Choose an activity in the classes category:
 -----------------------------------------------------
 ```
 
+### Admin options
 
-### Exiting the application
+Admin accounts have access to the `Admin tools` option. Currently, admins can add new admin and client users. Follow the prompts to enter the new user's username, password, and admin status. In this example, we'll add a client user with username `test` and password `testpw`.
 
-Navigate back to the home screen and select <kbd>X</kbd>, or enter `exit` at any time. Confirm your choice with <kbd>y</kbd>. Hit any other key to return to the previous menu.
+```
+-----------------------------------------------------
+Admin tools
+
+(1) Superuser account
+(2) Modify user
+(3) Export logs
+(B) Back
+-----------------------------------------------------
+Choose an option: 2
+-----------------------------------------------------
+Modify user
+
+(1) Add user
+(2) Remove user
+(3) Change privileges
+(B) Back
+-----------------------------------------------------
+Choose an option: 1
+Enter new username: test
+Set new password:
+User is [1] admin or [0] client: 0
+New user test added
+-----------------------------------------------------
+```
+
+After logging out and logging back in as `test`, notice that the client user doesn't have access to `Admin tools`.
+
+```
+-----------------------------------------------------
+Welcome back, test
+
+(1) Log existing activity
+(2) View logged data
+(3) View reports
+(4) View logging options
+(5) Add new activity
+(X) Logout
+-----------------------------------------------------
+```
 
 
-## Admin options
+Eventually, features will be added to allow admins to select, insert, update, and delete data associated with any user; remove users; elevate a client user to an admin; and export the audit log of user actions. This may be accomplished through a separate admin application.
 
-Admin accounts have access to the `Admin tools` option. Currently, admins can add new admin and client users. Follow the prompts to enter the new user's username, password, and admin status.
-
-Eventually, features will be added to allow admins to select, insert, update, and delete data associated with any user; remove users; elevate a client user to an admin; and export the audit log of user actions.
 
 ## Attribution
 

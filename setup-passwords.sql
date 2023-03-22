@@ -30,7 +30,7 @@ DELIMITER !
 CREATE PROCEDURE sp_add_user (
     new_username VARCHAR(20), 
     user_password VARCHAR(20), 
-    user_admin TINYINT(1))
+    user_admin TINYINT)
 BEGIN
     DECLARE user_salt CHAR(8);
     DECLARE hashed_pw BINARY(64);

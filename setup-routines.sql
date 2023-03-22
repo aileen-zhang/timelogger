@@ -43,7 +43,7 @@ END !
 -- Calculate if goal for a given task was met on a given day (24 hours)
     -- [signum(goal_time) * (daily_time(task_id) - abs(goal_time))] >= 0
     -- NOTE: sleep goal calculated separately below
-CREATE FUNCTION goal_met (d DATE, tid BIGINT) RETURNS TINYINT(1) DETERMINISTIC
+CREATE FUNCTION goal_met (d DATE, tid BIGINT) RETURNS TINYINT DETERMINISTIC
 BEGIN
     DECLARE tot_t INT;
     DECLARE pm INT;
@@ -334,7 +334,7 @@ BEGIN
 END !
 
 -- Special UDF to calculate sleep goal via comparison with sleep_duration()
-CREATE FUNCTION sleep_goal_met (d DATE, uid BIGINT) RETURNS TINYINT(1) DETERMINISTIC
+CREATE FUNCTION sleep_goal_met (d DATE, uid BIGINT) RETURNS TINYINT DETERMINISTIC
 BEGIN
     DECLARE slept_t INt;
     DECLARE pm INT;
@@ -359,10 +359,9 @@ END !
 
 -- STORED PROCEDURES
 
--- Set up client user with basic tracking info:
-    -- set up sleep tracking
-        -- set 'sl' as default unchangeable sleep symbol in user_task
-        -- set corresponding value in activity_key
+-- Set up client user with basic sleep tracking info:
+    -- set 'sl' as default sleep symbol in user_task
+    -- set corresponding value in activity_key
     -- NOTE: do not use this when loading in sample data!
 CREATE PROCEDURE setup_user (uid BIGINT)
 BEGIN 
@@ -379,7 +378,6 @@ END !
 
 
 -- Set up activity tracking option with user-provided arguments
-
 CREATE PROCEDURE setup_activity (uid BIGINT, s VARCHAR(10), 
                                  a VARCHAR(20), c VARCHAR(20), 
                                  d VARCHAR(100), g INT)
@@ -391,7 +389,7 @@ BEGIN
         VALUES (LAST_INSERT_ID(), a, c, d, g);
 END !
 
-
+-- Create an entry into timelog with user-provided symbol and time
 CREATE PROCEDURE log_entry (uid BIGINT, s VARCHAR(10), ts TIMESTAMP)
 BEGIN
     DECLARE tid BIGINT;
@@ -419,7 +417,7 @@ END !
 -- Trigger to update audit_log and track when users perform actions
 -- CREATE TRIGGER log_user_insert AFTER INSERT
 -- BEGIN
---      to be implemented later
+--      NOTE: to be implemented later
 -- END !
 
 DELIMITER ;
