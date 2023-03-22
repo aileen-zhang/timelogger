@@ -3,7 +3,7 @@
 -- Get list of all category names
 SELECT category_name FROM category;
 
--- Get symbol, name pair of all activities available for a given user to log
+-- Get symbol, name pair of all activities in a category that a user can log
 -- See RA exp (1)
 SELECT symbol, activity_name 
 FROM user_task NATURAL JOIN activity_key

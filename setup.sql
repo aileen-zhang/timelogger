@@ -38,7 +38,7 @@ CREATE TABLE user_task (
     user_id     BIGINT UNSIGNED NOT NULL,
     -- symbol entered by the user when actually logging entries
     symbol      VARCHAR(10) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES user_info(user_id)
+    FOREIGN KEY (user_id) REFERENCES user_info(user_id) ON DELETE CASCADE
 );
 
 -- Represents a mapping of generated task id to type of activity
@@ -57,7 +57,7 @@ CREATE TABLE activity_key (
         -- negative if goal is to exceed the time (e.g. exercise goal)
         -- positive if goal is to not meet the time (e.g. max screen time)
     goal_time       INT NOT NULL DEFAULT 0,
-    FOREIGN KEY (task_id) REFERENCES user_task(task_id),
+    FOREIGN KEY (task_id) REFERENCES user_task(task_id) ON DELETE CASCADE,
     FOREIGN KEY (category_name) REFERENCES category(category_name)
 );
 
@@ -70,7 +70,7 @@ CREATE TABLE timelog (
     note        VARCHAR(100),
     exclude     BOOLEAN DEFAULT FALSE,
     PRIMARY KEY (log_time, task_id),
-    FOREIGN KEY (task_id) REFERENCES user_task(task_id)
+    FOREIGN KEY (task_id) REFERENCES user_task(task_id) ON DELETE CASCADE
 );
 
 -- NOTE: not implemented yet
