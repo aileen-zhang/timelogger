@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--
+    Author: Aileen Zhang
+    CS 132 Spring 2023
+    Date: June 7 2023
+    This is the index (login) page for the TimeLogger application.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet" />
+    <script src="helpers.js"></script>
+    <script defer src="login.js"></script>
+    <title>TimeLogger</title>
+  </head>
+  <body>
+    <!-- Top header -->
+    <header>
+      <h1>TimeLogger</h1>
+    </header>
+
+    <main>
+        <p id="timestamp">The time is currently 
+            <span id="time"></span> on <span id="date"></span></p>
+        <form id="login-form">
+            <div class="container">
+              <label>Username</label>
+              <input type="text" placeholder="ex: aileen" id="username" required>
+                <br>
+              <label>Password</label>
+              <input type="password" placeholder="ex: azpw" id="password" required>
+              <br>
+              <label>
+                <input type="checkbox" id="admin-opt"> Log in as admin
+              </label>
+              <br>
+              <button id="login-btn" type="submit">Let's go!</button>
+            </div>
+          </form>
+        
+
+    </main>
+
+    <footer>
+      <p><a href="https://github.com/aileen-zhang/timelogger">TimeLogger</a> &copy; 2023 Aileen Zhang</p>
+    </footer>
+  </body>
+</html>

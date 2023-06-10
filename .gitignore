@@ -1,5 +1,6 @@
-/app-demo.py
-/data_f21/log_clean.csv
-/data_f21/log_raw.csv
-/data_f21/process_log.ipynb
-/data_f21/task_symbol.csv
+/sql/app-demo.py
+/sql/data_f21/log_clean.csv
+/sql/data_f21/log_raw.csv
+/sql/data_f21/process_log.ipynb
+/sql/data_f21/task_symbol.csv
+/node_modules/
