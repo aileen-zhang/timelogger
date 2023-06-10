@@ -46,6 +46,9 @@ app.use(express.static("src"));
 // - Other helper functions
 // - getDB()
 
+/**
+ * Given a username and password, returns whether the credentials are valid
+ */
 app.post("/login", async (req, res) => {
     let un = req.body.username;
     let pw = req.body.password;
@@ -53,29 +56,39 @@ app.post("/login", async (req, res) => {
     try {
         let [r,f] = await queryDB(loginQuery);
         let val = r[0][f[0].name];
-        console.log(val);
-        if (val == 1) {
-            res.send({login: 1});
-        }
-        else {
-            res.send({login: 0});
-    }}
+        res.send({login: val});
+    }
     catch (err) {
         console.log("/login broke");
     }
 });
 
-const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}...`);
-});
+/**
+ * Given the name of a table, returns all rows and 
+ */
+app.get("/table", async (req, res) => {
+    let name = req.body.name;
+    let categoryQuery = `SELECT * FROM ${name};`;
+    try {
+        let [r,f] = await queryDB(categoryQuery);
+        let fnames = [];
+        for (let i = 0; i < f.length; i++) {
+            fnames.append(f[i].name);            
+        }
+        res.send({rows: r, fields:fnames});
+    }
+    catch (err) {
+        console.log("/table fetch broke");
+    }
+})
 
-// /**
-//  * Given a SQL query string, connect to the database, execute the query, and
-//  * return the results
-//  * @param {string} qStr
-//  * @returns {} the result of the query
-//  */
+
+/**
+ * Given a SQL query string, connect to the database, execute the query, and
+ * return the results
+ * @param {string} qStr
+ * @returns {} the result of the query
+ */
 async function queryDB(qStr) {
     let db = await getDB();
     try {
@@ -87,16 +100,15 @@ async function queryDB(qStr) {
         console.log("query broke!");
     }
 }
+// TODO: similar function to execute stored procedures
 
-// // TODO: similar function to execute stored procedures
 
-
-// /**
-//  * Establishes a database connection to the YOURDB and returns the database object.
-//  * Any errors that occur during connection should be caught in the function
-//  * that calls this one.
-//  * @returns {Object} - The database object for the connection.
-//  */
+/**
+ * Establishes a database connection to the YOURDB and returns the database object.
+ * Any errors that occur during connection should be caught in the function
+ * that calls this one.
+ * @returns {Object} - The database object for the connection.
+ */
 async function getDB() {
   let database = await mysql.createConnection({
       host: "localhost",
@@ -107,3 +119,8 @@ async function getDB() {
   });
   return database;
 }
+
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}...`);
+});

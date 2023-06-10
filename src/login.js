@@ -25,7 +25,7 @@
     async function checkLogin() {
         let user = qs("#username").value;
         let pass = qs("#password").value;
-        if (user.length() == 0 || pass.length() == 0) {
+        if (user.length == 0 || pass.length == 0) {
             errMsg("Username and password are required.");
             return;
         }

@@ -10,7 +10,7 @@ main {
     align-items: center;
 }
 
-main, header, #choices {
+main, header, .menu {
     display: flex;
     justify-content: space-evenly;
     flex-direction: column;
@@ -38,16 +38,15 @@ h1 {
     font-weight: normal;
 }
 
-#choices, #graphics {
+.menu {
     width: 50%;
     align-items: center;
 }
 
-#choices > button {
+.menu > button {
     font-size: large;
     font-weight: bold;
     color: var(--dk-blue);
-    float: right;
     background-color: var(--lt-blue);
     border-radius: 50px;
     border-color: var(--dk-blue);
@@ -58,7 +57,7 @@ h1 {
     margin: 10px;
 }
 
-#choices > button:hover {
+.menu > button:hover {
     background-color: var(--md-blue);
     color:white;
 }
