@@ -8,9 +8,8 @@
 (function() {
     "use strict";
 
-    // this is constant across one run of the program but needs to be retrieved
-    // from the SQL (all caps for convenience)
-    let USERNAME = "aileen";
+    // we assume that this value exists, since the user has successfully logged in
+    const USERNAME = localStorage.getItem("localUser");
 
     const homeOpt = ["Log existing activity", "View logged data", "View reports",
             "View logging options", "Add new activity"];
@@ -22,14 +21,26 @@
     const sleepOpt = ["Bedtime", "Wake time", "Sleep duration", "Sleep goals"];
 
     async function init() {
-        getUsername();
-        populateHomeButtons();
-        printWelcome(USERNAME);
-        printPrompt("What would you like to do?");
+        qs("#logout-btn").addEventListener("click", () => localStorage.removeItem("localUser"));
+        if (checkUser()) {
+            populateHomeButtons();
+            printWelcome(USERNAME);
+            printPrompt("What would you like to do?");
+        }
     }
 
-    async function getUsername() {
-        
+
+    /**
+     * Checks whether there is a localUser of the TimeLogger app, which should
+     * only occur when this page is reached directly from the login page
+     * @returns {boolean} - true if there is a logged in user, false otherwise
+     */
+    function checkUser() {
+        if (USERNAME == null) {
+            printPrompt("There has been an error. Please log out and log in again.");
+            return false;
+        }
+        return true;
     }
 
 
