@@ -1,0 +1,18 @@
+{
+  "name": "timelog",
+  "version": "1.0.0",
+  "description": "TimeLogger API",
+  "main": "api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Aileen Zhang",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "globby": "^11.0.4",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.3.3",
+    "promise-mysql": "^5.2.0"
+  }
+}

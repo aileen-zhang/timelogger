@@ -8,37 +8,58 @@
 (function() {
     "use strict";
 
-    const DEBUG = true;
-    const LOGIN_URL = "/";
+    const LOGIN_URL = "/login";
 
     function init() {
-        qs("#login-btn").addEventListener("click", (evt) => {checkLogin(evt)});
+        // going back to the login page is equivalent to logging out
+        localStorage.removeItem("localUser");
+        qs("#login-btn").addEventListener("click", (e) => {e.preventDefault(); 
+                                                           checkLogin()});
     }
 
-    async function checkLogin(evt) {
-        let params =  new FormData();
+    /**
+     * Event handler to check login info and navigate to home.html if credentials
+     * are correct.
+     * @returns none
+     */
+    async function checkLogin() {
         let user = qs("#username").value;
         let pass = qs("#password").value;
+        if (user.length() == 0 || pass.length() == 0) {
+            errMsg("Username and password are required.");
+            return;
+        }
+        // TODO: check for admin status if admin login requested
+        let admin = qs("#admin-opt").checked;
+        let params =  new FormData();
         params.append("username", user);
         params.append("password", pass);
 
-        // let resp = await fetch(LOGIN_URL, {method: "POST", body: params});
-        // try {
-        //     let correct = checkStatus(resp);
-        if (pass == "asdf") {
-            localStorage.setItem("localUser", user);
+        let resp = await fetch(LOGIN_URL, {
+            method: "POST", 
+            body: params, 
+            mode:"no-cors"});
+        try {
+            let r = checkStatus(resp);
+            const ret = await r.json();
+            if (ret.login == 1) {
+                localStorage.setItem("localUser", user);
+                location.href = "home.html";
+            }
+            else {
+                errMsg("Incorrect username or password. Try again!");
+            }
+        } catch (error) {
+            errMsg("There has been an error. Please try again.");
         }
-        else {
-            evt.preventDefault();
-            loginErr();
-        }
-        // } catch (error) {
-        //     handleError(error);
-        // }
-
     }
-    function loginErr() {
-        qs("#msg-area").textContent = "Incorrect username or password. Try again!"
+
+    /**
+     * Helper function to display messages
+     * @param {string} msg 
+     */
+    function errMsg(msg) {
+        qs("#msg-area").textContent = msg;
     }
 
     init();
