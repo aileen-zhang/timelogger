@@ -1,6 +1,9 @@
-/sql/app-demo.py
-/sql/data_f21/log_clean.csv
-/sql/data_f21/log_raw.csv
-/sql/data_f21/process_log.ipynb
-/sql/data_f21/task_symbol.csv
+src/sql/app-demo.py
+src/sql/data_f21/log_clean.csv
+src/sql/data_f21/log_raw.csv
+src/sql/data_f21/process_log.ipynb
+src/sql/data_f21/task_symbol.csv
 /node_modules/
+/package-lock.json
+src/exampleapi.js
+src/APIDOC.md

@@ -2,7 +2,7 @@
  * Author: Aileen Zhang
  * CS 132 Spring 2023
  * 
- * This is the JS file to process inputs to the login form.
+ * This is the JS file to display the time in a consistent format across all pages.
  */
 
 (function() {
@@ -10,7 +10,6 @@
     const TICK = 10; // check time every 10 ms, so displayed time is mostly in sync
     let timerId;
     
-
     function init() {
         timerId = setInterval(() => { displayTime(); }, TICK);
     }
@@ -35,7 +34,7 @@
             if (hr == 12) { hrStr = "12"; }
             else { hrStr = (hr-12).toString(); }
         }
-        let day = date.getDay();
+        let day = date.getDate();
         let month = date.toLocaleString('default', { month: 'long' });
         let year = date.getFullYear();
         let timeStr = `${hrStr}:${minStr}:${secStr} ${ampm}`

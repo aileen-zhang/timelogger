@@ -1,0 +1,48 @@
+@import "styles.css";
+
+body {
+    margin: 100px;
+}
+
+h1 {
+    font-size:xx-large;
+    border-style: solid;
+    border-color: var(--dk-blue);
+    border-width: 5px;
+    border-radius: 50px;
+    display:inline;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#login-form {
+    display: flex;
+    margin: 50px;
+    margin-top: 0;
+    justify-content: space-evenly;
+    flex-direction: row;
+}
+
+label {
+    align-items: center;
+}
+
+#timestamp {
+    font-size: x-large;
+    margin: 60px;
+}
+
+#username, #password {
+    font-size: 10pt;
+    padding: 6px;
+}
+
+input {
+    margin-bottom: 15pt;
+}
+
+#msg-area {
+    font-size:small;
+    color: var(--md-blue);
+    text-align: center;
+}

@@ -1,0 +1,70 @@
+/*
+* Author: Aileen Zhang
+* CS 132 Spring 2023
+*
+* This is the CSS shared across pages for the TimeLogger app.
+*/
+
+:root {
+    --dk-blue: #2a5e77;
+    --md-blue: #3290bc;
+    --lt-blue: aliceblue;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+body, input {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+h1, button {
+    font-family: 'Poppins', sans-serif;
+}
+
+header, #timestamp, footer {
+    text-align: center;
+}
+
+header, #time, footer {
+    color:var(--dk-blue);
+}
+
+#time {
+    font-weight: bolder;
+}
+
+footer {
+    width: 100%;
+    font-size: small;
+    position: fixed;
+    bottom: 0px; 
+    left: 0px; 
+}
+
+a {
+    text-decoration:inherit;
+    color:inherit;
+}
+
+a:hover {
+    color:var(--md-blue);
+}
+
+#login-btn, #logout-btn {
+    font-size: large;
+    float: right;
+    background-color: var(--dk-blue);
+    color: white;
+    border-radius: 20px;
+    border-color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.hidden {
+    display: none;
+}

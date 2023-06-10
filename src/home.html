@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--
+    Author: Aileen Zhang
+    CS 132 Spring 2023
+    This is the main homepage for a user of the application.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet" />
+    <link href="home.css" rel="stylesheet" />
+    <script src="helpers.js"></script>
+    <script defer src="time.js"></script>
+    <script defer src="timelogger.js"></script>
+    <title>TimeLogger</title>
+  </head>
+  <body>
+    <!-- Top header -->
+    <header>
+      <form action="index.html">
+      <button id="logout-btn" type="submit">Logout</button></form>
+      <h1>TimeLogger</h1> 
+      <p id="timestamp">The time is currently 
+        <span id="time"></span> on <span id="date"></span>
+      </p>
+    </header>
+
+    <main>
+      <h2 id="large-msg"></h2>
+      <h3 id="prompt"></h3>
+      <div id="choices"></div>
+      <div id="graphics" class="hidden"></div>
+    </main>
+
+    <footer>
+      <p><a href="https://github.com/aileen-zhang/timelogger">TimeLogger</a> &copy; 2023 Aileen Zhang</p>
+    </footer>
+  </body>
+</html>
