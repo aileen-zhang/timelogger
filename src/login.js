@@ -10,11 +10,11 @@
 
     const LOGIN_URL = "/login";
 
-    function init() {
-        // going back to the login page is equivalent to logging out
+    async function init() {
+        // going back to the login page should be equivalent to logging out
         localStorage.removeItem("localUser");
-        qs("#login-btn").addEventListener("click", (e) => {e.preventDefault(); 
-                                                           checkLogin()});
+        qs("#login-btn").addEventListener("click", async (e) => {e.preventDefault(); 
+                                                           await checkLogin()});
     }
 
     /**

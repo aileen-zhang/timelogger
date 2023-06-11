@@ -1,7 +1,8 @@
 @import "styles.css";
 
 body {
-    margin: 100px;
+    padding: 100px;
+    padding-bottom: 0;
 }
 
 h1 {
@@ -45,4 +46,8 @@ input {
     font-size:small;
     color: var(--md-blue);
     text-align: center;
+}
+
+#login-btn {
+    float: right;
 }

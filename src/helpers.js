@@ -23,6 +23,15 @@ function qs(selector) {
 }
 
 /**
+ * Returns the first element that has the given name.
+ * @param {string} name - element name
+ * @returns {object} first element with the given name (null if none)
+ */
+function nm(name) {
+  return document.querySelector(`[name='${name}']`);
+}
+
+/**
  * Returns the array of elements that match the given CSS selector.
  * @param {string} selector - CSS query selector
  * @returns {object[]} array of DOM objects matching the query (empty if none).

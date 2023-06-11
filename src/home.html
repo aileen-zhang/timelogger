@@ -20,23 +20,102 @@
   </head>
   <body>
     <header>
-      <form action="index.html">
-        <button id="logout-btn" type="submit">Logout</button>
-      </form>
-      <h1>TimeLogger</h1> 
+      <div id="header-btns">
+        <button id="logout-btn" class="nav-btn">Logout</button>
+        <button id="home-btn" class="nav-btn hidden">Back to home</button>
+      </div>
+      <h1>TimeLogger</h1>
       <p id="timestamp">The time is currently 
         <span id="time"></span> on <span id="date"></span>
       </p>
     </header>
-
     <main>
       <h2 id="large-msg"></h2>
       <h3 id="prompt"></h3>
       <div id="main-menu" class="menu"></div>
-      <div id="time-menu" class="menu hidden"></div>
-      <div id="report-menu" class="menu hidden"></div>
+
+      <!-- LOG EXISTING ACTIVITY -->
+      <div id="log-menu" class="menu hidden">
+        <form id="log-act-form">
+          <div class="container">
+            <label>
+              <p>Category name</p>
+              <select class="category-select" id="log-cat-sel">
+              </select>
+            </label>
+            <label>
+              <p>Activity name</p>
+              <select class="activity-select" id="log-act-sel">
+              </select>
+            </label>
+            <label>
+              <p>Timestamp</p>
+              <select id="log-time">
+              </select>
+            </label>
+            <label>
+              <p>Description</p>
+              <input type="text" placeholder="ex: weightlifting with friends" 
+                     maxlength="100" name="log-desc">
+            </label>
+            <button id="log-act-btn" type="submit" class="nav-btn form-btn">
+              Log activity
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div id="report-menu" class="menu hidden">
+
+
+      </div>
       <div id="sleep-menu" class="menu hidden"></div>
-      <div id="graphics-menu" class="menu hidden"></div>
+      <div id="data-menu" class="menu hidden"></div>
+
+      <!-- ADD NEW ACTIVITY -->
+      <div id="add-menu" class="menu hidden">
+        <form id="add-act-form">
+          <div class="container">
+            <label>
+              <p>Category name</p>
+              <select class="category-select" name="add-act-cat" required>
+              </select>
+            </label>
+            <label>
+              <p>Activity name</p>
+              <input type="text" placeholder="ex: running" name="add-act-name" 
+                     maxlength="20" required>
+            </label>
+            <label>
+              <p>Logging symbol</p>
+              <input type="text" placeholder="ex: run" name="add-act-sym" 
+                     maxlength="10" required>
+            </label>
+            <label>
+              <p>Description</p>
+              <input type="text" placeholder="ex: running outside and at the gym" 
+                     maxlength="100" name="add-act-desc">
+            </label>
+            <div id="goal-set">
+                <label id="goal-num"><p>Goal time (minutes)</p>
+                  <input type="text" placeholder="ex: 60 (default 0)" 
+                        maxlength="4" pattern="[0-9]+" name="goal-time">
+                </label>
+                <div class="radio-btn">
+                  <input type="radio" name="goal-pm" value="1" checked>
+                  <label for="goal-pm">less than</label>
+                </div>
+                <div class="radio-btn">
+                  <input type="radio" name="goal-pm" value="-1">
+                  <label for="goal-pm">more than</label>
+                </div>
+            </div>
+            <button id="add-act-btn" type="submit" class="nav-btn form-btn">
+              Add activity
+            </button>
+          </div>
+        </form>
+      </div>
     </main>
 
     <footer>

@@ -47,7 +47,8 @@ app.use(express.static("src"));
 // - getDB()
 
 /**
- * Given a username and password, returns whether the credentials are valid
+ * Given a username and password, returns whether the credentials are valid.
+ * TODO check whether the user is an admin
  */
 app.post("/login", async (req, res) => {
     let un = req.body.username;
@@ -64,44 +65,99 @@ app.post("/login", async (req, res) => {
 });
 
 /**
- * Given the name of a table, returns all rows and 
+ * Given the name of a table, returns all rows and the names of the columns.
  */
-app.get("/table", async (req, res) => {
-    let name = req.body.name;
-    let categoryQuery = `SELECT * FROM ${name};`;
-    try {
-        let [r,f] = await queryDB(categoryQuery);
-        let fnames = [];
-        for (let i = 0; i < f.length; i++) {
-            fnames.append(f[i].name);            
-        }
-        res.send({rows: r, fields:fnames});
-    }
-    catch (err) {
-        console.log("/table fetch broke");
-    }
+app.get("/table/:name", async (req, res) => {
+    let tableName = decodeURI(req.params.name);
+    let tableQuery = `SELECT * FROM ${tableName};`;
+    await getData(tableQuery, res);
+})
+
+/**
+ * More advanced filtering capabilities
+ */
+app.get("/filter/:name/:fields/:filters", async (req, res) => {
+    let tableName = decodeURI(req.params.name);
+    let tableCols = decodeURI(req.params.fields);
+    let whereClause = decodeURI(req.params.filters);
+    let filterQuery = `SELECT ${tableCols} FROM ${tableName} WHERE ${whereClause};`;
+    await getData(filterQuery, res);
 })
 
 
 /**
+ * Call the stored procedure to add a new logging activity (assuming the inputs
+ * have been validated).
+ */
+app.post("/add-activity", async (req, res) => {
+    let uid = req.body.user_id;
+    let args = req.body.args;
+    console.log(args);
+    let addQuery = `CALL setup_activity(${uid}, ${args});`;
+    try {
+        let [resp,_] = await queryDB(addQuery);
+        let aff = resp.affectedRows;
+        let warn = resp.warningStatus;
+        console.log(aff);
+        console.log(warn);
+        if (aff == 1 && warn == 0) {
+            res.send({success: 1});
+        }
+        else {
+           res.send({success: 0}); 
+        }
+    }
+    catch (err) {
+        console.log("/add-activity broke");
+    }
+})
+
+/**
+ * Call a stored procedure to add an entry collected from a form.
+ */
+app.post("/log-activity", async (req, res) => {
+
+
+
+})
+
+
+
+/************************** DATABASE HELPERS **************************/
+/**
  * Given a SQL query string, connect to the database, execute the query, and
  * return the results
  * @param {string} qStr
- * @returns {} the result of the query
+ * @returns {Object[][]} query results as two JSON arrays [rows, fields]
  */
 async function queryDB(qStr) {
     let db = await getDB();
     try {
         db.connect();
-        const data = await db.query(qStr)
+        const data = await db.query(qStr);
+        db.close();
         return data;
     }
     catch (err) {
+        db.close();
         console.log("query broke!");
+        console.log(err);
     }
 }
-// TODO: similar function to execute stored procedures
 
+async function getData(qStr, res) {
+    try {
+        let [r, f] = await queryDB(qStr);
+        let fnames = [];
+        for (let i = 0; i < f.length; i++) {
+            fnames.push(f[i].name);            
+        }
+        res.send({rows: r, fields:fnames});
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
 
 /**
  * Establishes a database connection to the YOURDB and returns the database object.

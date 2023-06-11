@@ -31,16 +31,20 @@
       <form id="login-form">
         <div class="container">
           <label>Username
-          <input type="text" placeholder="ex: aileen" id="username" required></label>
+            <input type="text" placeholder="ex: aileen" 
+                  id="username" pattern="[A-Z][a-z]+ [A-Z][a-z]+" required>
+          </label>
           <br>
           <label>Password
-          <input type="password" placeholder="ex: azpw" id="password" required></label>
+            <input type="password" placeholder="ex: azpw" 
+                  id="password" pattern="[A-Z][a-z]+ [A-Z][a-z]+" required>
+          </label>
           <br>
           <label>
             <input type="checkbox" id="admin-opt"> Log in as admin
           </label>
           <br>
-          <button id="login-btn" type="submit">Let's go!</button>
+          <button id="login-btn" type="submit" class="nav-btn">Let's go!</button>
         </div>
       </form>
     </main>
