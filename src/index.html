@@ -29,21 +29,18 @@
       <p id="msg-area"></p>
       
       <form id="login-form">
-        <div class="container">
-          <label>Username
+        <div id="container">
+          <label class="lbl">Username
             <input type="text" placeholder="ex: aileen" 
                   id="username" pattern="[A-Z][a-z]+ [A-Z][a-z]+" required>
           </label>
-          <br>
-          <label>Password
+          <label class="lbl">Password
             <input type="password" placeholder="ex: azpw" 
                   id="password" pattern="[A-Z][a-z]+ [A-Z][a-z]+" required>
           </label>
-          <br>
           <label>
             <input type="checkbox" id="admin-opt"> Log in as admin
           </label>
-          <br>
           <button id="login-btn" type="submit" class="nav-btn">Let's go!</button>
         </div>
       </form>

@@ -24,8 +24,14 @@ h1 {
     flex-direction: row;
 }
 
-label {
+.lbl {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-grow: 1;
     align-items: center;
+    font-size: large;
+    margin-bottom: 15pt;
 }
 
 #timestamp {
@@ -38,10 +44,6 @@ label {
     padding: 6px;
 }
 
-input {
-    margin-bottom: 15pt;
-}
-
 #msg-area {
     font-size:small;
     color: var(--md-blue);
@@ -50,4 +52,13 @@ input {
 
 #login-btn {
     float: right;
+    align-self: flex-end;
+}
+
+#container {
+    display:flex;
+    flex-direction: column;
+    align-content: space-between;
+    justify-content: space-around;
+    width: 300px;
 }

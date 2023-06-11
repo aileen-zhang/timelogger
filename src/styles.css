@@ -8,7 +8,7 @@
 :root {
     --dk-blue: #2a5e77;
     --md-blue: #3290bc;
-    --lt-blue: aliceblue;
+    --lt-blue: #f2f9fef8;
 }
 
 html {
@@ -16,7 +16,7 @@ html {
     min-width: 700px;
 }
 
-body{
+body {
     margin: 20px;
     display: flex;
     flex-direction: column;

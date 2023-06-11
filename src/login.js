@@ -13,8 +13,8 @@
     async function init() {
         // going back to the login page should be equivalent to logging out
         localStorage.removeItem("localUser");
-        qs("#login-btn").addEventListener("click", async (e) => {e.preventDefault(); 
-                                                           await checkLogin()});
+        qs("#login-btn").addEventListener("click", 
+            async (e) => {e.preventDefault(); await checkLogin()});
     }
 
     /**
@@ -49,17 +49,22 @@
             else {
                 errMsg("Incorrect username or password. Try again!");
             }
-        } catch (error) {
-            errMsg("There has been an error. Please try again.");
+        } catch (err) {
+            errMsg(err);
         }
     }
 
     /**
-     * Helper function to display messages
+     * Helper function to display error messages
      * @param {string} msg 
      */
     function errMsg(msg) {
-        qs("#msg-area").textContent = msg;
+        if (typeof msg === "string") {
+            qs("#msg-area").textContent = msg;
+        }
+        else {
+            qs("#msg-area").textContent = "Login error. Please try again.";
+        }
     }
 
     init();

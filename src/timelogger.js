@@ -11,20 +11,24 @@
     const TABLE_URL = "/table/";
     const FILTER_URL = "/filter/"
     const ADD_URL = "/add-activity";
-    const LOG_URL = "/log-activity/";
+    // const LOG_URL = "/log-activity";
+    const IMG_URL = "/images"
 
     // Preset dictionaries of button text and button label
     const HOME_OPT = {"Log completed activity": "log-act", "View logged data": "view-data",
                     "View data reports": "view-reps", "View logging options": "view-opts", 
                     "Add new activity": "new-act"};
 
-    const TIME_OPT = {"This 30 minutes": "this-30", "Last 30 minutes": "last-30",
-                     "Custom time range": "custom-time"};
+    // const TIME_OPT = {"This 30 minutes": "this-30", "Last 30 minutes": "last-30",
+    //                  "Custom time range": "custom-time"};
 
     const REPORT_OPT = {"Sleep statistics": "sleep-stats", "Activity statistics": "act-stats"};
 
     const SLEEP_OPT = {"Bedtime":"bedtime", "Wake time":"wake-time", 
                         "Sleep duration":"sleep-dur", "Sleep goals":"sleep-goals"};
+
+    const DATA_OPT = {"Return image (testing)":"ret-img", "Bar graph": "bar-graph", 
+                     "Pie chart": "pie-chart"};
 
     let usernameLoggedIn;
     let userIdLoggedIn;
@@ -32,15 +36,16 @@
 
     async function init() {
         installButtons();
-        userIdLoggedIn = null;
         usernameLoggedIn = localStorage.getItem("localUser");
         let check = await checkUser();
         if (check) {
             await getCategories();
-            populateHomeButtons();
-            installMainMenu();
+            populateMenuButtons("main-menu", HOME_OPT);
+            populateMenuButtons("report-menu", REPORT_OPT);
+            populateMenuButtons("sleep-menu", SLEEP_OPT);
+            populateMenuButtons("data-menu", DATA_OPT);
+            installNav();
             installFormSubmits();
-            populateCategoryDropdowns();
             showHome();
         }
    }
@@ -58,14 +63,14 @@
    }
 
     /**
-     * Checks whether there is a localUser of the TimeLogger app, which should
+     * Checks for a logged in user of the TimeLogger app, which should
      * only occur when this page is reached directly from the login page.
      * Also populate the userIdLoggedIn value for later use.
      * @returns {boolean} - true if there is a logged in user, false otherwise
      */
     async function checkUser() {
         if (!usernameLoggedIn) {
-            printPrompt("There has been an error. Please log out and log in again.");
+            printPrompt("Please log out and log in again.");
             return false;
         }
         let resp = await fetch(FILTER_URL + 
@@ -79,9 +84,11 @@
             }
             else {
                 printPrompt("Error in user_id retrieval. Please try again.");
+                return false;
             }
-        } catch (error) {
-            printPrompt("There has been an error. Please try again.");
+        } catch (err) {
+            handleError(err);
+            return false;
         }
         return true;
     }
@@ -100,8 +107,8 @@
             for (let i = 0; i < data.length; i++) {
                 categories[data[i][names[0]]] = data[i][names[1]].trimEnd();
             }
-        } catch (error) {
-            console.log(error);
+        } catch (err) {
+            handleError(err);
         }
     }
 
@@ -109,81 +116,106 @@
      * Retrieve the activities belonging to the input category.
      * @param {string} category
      * @returns {Object[]} - a list of JSON objects containing
-     *                       {symbol, activity_name, activity_desc}
+     *                       {symbol, activity_name, activity_desc, goal_time}
      */
     async function getActivities(category) {
         let tableName = encodeURI("user_task NATURAL JOIN activity_key");
         let whereClause = encodeURI(`category_name='${category}' AND 
                                      user_id=${userIdLoggedIn}`);
-        let tableCols = "symbol,activity_name,activity_desc"
+        let tableCols = "symbol,activity_name,activity_desc,goal_time"
         let qStr = `${tableName}/${tableCols}/${whereClause}`;
         let resp = await fetch(FILTER_URL + qStr);
         try {
             let r = checkStatus(resp);
             const ret = await r.json();
             return ret.rows;            
-        } catch (error) {
-            console.log(error);
+        } catch (err) {
+            handleError(err);
         }
     }
 
 
 /************************** MENU DISPLAY HANDLERS **************************/
     /**
-     * Attach sub-menu display handlers to main menu buttons
+     * Attach sub-menu display handlers to all generated menu buttons
      */
-    function installMainMenu() {
+    function installNav() {
         id("log-act").addEventListener("click", showLog);
-        // id("view-data").addEventListener("click", showData);
-        // id("view-reps").addEventListener("click", showReps);
-        // id("view-opts").addEventListener("click", showOpts);
+        id("view-data").addEventListener("click", showData);
+        id("view-reps").addEventListener("click", showReps);
+        id("view-opts").addEventListener("click", showOpts);
         id("new-act").addEventListener("click", showNew);
+        id("sleep-stats").addEventListener("click", showSleep);
+        // this is just a demo of the image return
+        id("ret-img").addEventListener("click", retImgTest);
     }
 
     /**
-     * Show the main menu (home menu)
+     * Show the main menu (home menu) and reset form fields
      */
     function showHome() {
         printWelcome(usernameLoggedIn);
         printPrompt("What would you like to do?");
         revealMenu("main-menu");
+        // hack to reset selection dropdowns, table displays, etc.
+        populateCategoryDropdowns();
+        let actDD = id("log-act-sel");
+        let def = makeDefaultOpt("First choose a category");
+        actDD.innerHTML = "";
+        actDD.appendChild(def);
+        id("opt-info").innerHTML = "";
     }
 
-    /**
-     * Show the log existing activity menu
-     */
     function showLog() {
-        printMsg("Record a completed activity");
-        printPrompt("Log an activity, time period, and an optional description.");
+        printMsg("Log a completed activity");
+        printPrompt("Record an activity, time period, and an optional description.");
         revealMenu("log-menu");
     }
 
+    function showData() {
+        printMsg("View recorded data");
+        printPrompt("Select a data visualization format.");
+        revealMenu("data-menu");
+    }
 
-    // TODO: more handlers here
+    function showReps() {
+        printMsg("View activity reports");
+        printPrompt("Select a report option.");
+        revealMenu("report-menu");
+    }
 
+    function showOpts() {
+        printMsg("View logging options");
+        printPrompt("Select a category to view activities, descriptions, and goals (in minutes).");
+        revealMenu("opt-menu");
+    }
 
-    /**
-     * Show the add new activity menu
-     */
     function showNew() {
         printMsg("Add a new activity");
         printPrompt("Select a category, name, symbol, and an optional description and goal.");
         revealMenu("add-menu");
     }
 
+    function showSleep() {
+        printMsg("Sleep analysis reports");
+        printPrompt("Select the report you would like to view. [UNDER CONSTRUCTION]");
+        revealMenu("sleep-menu");
+    }
 
 
-/************************** MENU INITIALIZERS **************************/
+/************************** PAGE INITIALIZERS **************************/
     /**
-     * Initialize the page with the main menu options (client user)
+     * Initialize a page with menu options
+     * @param {string} menuId
+     * @param {Object} opts
      */
-    function populateHomeButtons() {
-        const menu = qs("#main-menu");
+    function populateMenuButtons(menuId, opts) {
+        const menu = id(menuId);
         menu.innerHTML = "";
-        Object.keys(HOME_OPT).forEach(option => {
+        Object.keys(opts).forEach(option => {
             let newBtn = gen("button");
             newBtn.textContent = option;
-            newBtn.id = HOME_OPT[option];
+            newBtn.id = opts[option];
             menu.appendChild(newBtn);
         });
     }
@@ -240,6 +272,41 @@
         });
     }
 
+    /**
+     * Populate and display a table of activity name, description, and goal times
+     * @param {string} cat - name of category of interest
+     * @param {string} tabId - id of the table to populate with info
+     */
+    async function populateActivityTable(cat, tabId) {
+        const tab = id(tabId);
+        tab.innerHTML =`<tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Goal</th>
+                        </tr>`;
+        let acts = await getActivities(cat);
+        acts.forEach(act => {
+            let r = gen("tr");
+            let n = gen("td");
+            let d = gen("td");
+            let g = gen("td");
+            let gt = act.goal_time;
+            let gs;
+            if (gt > 0) { gs = "<" + gt }
+            else if (gt < 0) { gs = ">" + (-gt) }
+            else { gs = "..." }
+            let ds = act.activity_desc;
+            if (ds == "") { ds = "..." }
+            n.textContent = act.activity_name;
+            d.textContent = ds;
+            g.textContent = gs;
+            r.appendChild(n);
+            r.appendChild(d);
+            r.appendChild(g);
+            tab.appendChild(r);
+        });
+    }
+
 
 /************************** FORM HTML PROCESSING **************************/
 
@@ -253,10 +320,12 @@
             async (e) => {e.preventDefault(); await addNewActivity()});
         qs("#log-act-btn").addEventListener("click", 
             async (e) => {e.preventDefault(); await logActivity()});
+        qs("#opt-cat-sel").addEventListener("change", 
+            async () => {await populateActTable()});
     }
 
     /**
-     * Run this function each time a new category is chosen to change the
+     * Run this function each time a new category is chosen to change a
      * dropdown menu to reflect the activities in that category.
      */
     async function populateLogActDropdown() {
@@ -264,9 +333,17 @@
         populateActivityDropdown(cat, "log-act-sel");
     }
 
-
     /**
-     * Given form content, validates and posts new activity log option
+     * Run this function each time a new category is chosen to populate a
+     * table to display the activities.
+     */
+    async function populateActTable() {
+        let cat = qs("#opt-cat-sel").value;
+        populateActivityTable(cat, "opt-info");
+    }
+    
+    /**
+     * Given form contents, validates and posts new activity log option
      * @returns none
      */
     async function addNewActivity() {
@@ -289,7 +366,7 @@
                 goal = pm * parseInt(goalIpt);
             }
         } catch (err) {
-            printPrompt("Please enter an integer number of minutes.");
+            handleError(err);
             return;
         }
         
@@ -306,15 +383,14 @@
         try {
             let r = checkStatus(resp);
             const ret = await r.json();
-            console.log(ret);
             if (ret.success == 1) {
                 printPrompt("New activity successfully added.");
             }
             else {
-                printPrompt("Activity not added. Try again.");
+                printPrompt("Activity not added. Please try again.");
             }
-        } catch (error) {
-            printPrompt("Error encountered. Please check your inputs.");
+        } catch (err) {
+            handleError(err);
         }
     }
 
@@ -323,12 +399,8 @@
      * @returns none
      */
     async function logActivity() {
-        // TODO!!
-
+        // TODO: use a POST endpoint to call a stored procedure
     }
-
-
-
 
 /************************** MESSAGE DISPLAY HELPERS **************************/
     /**
@@ -384,6 +456,13 @@
 
 /************************** ERROR HANDLING **************************/
 
+    function handleError(err) {
+        if (typeof err === "string") {
+            printPrompt(err);
+        } else {
+            printPrompt("An error occurred during your request. Please try again.");
+        }
+    }
 
     init();
 })();

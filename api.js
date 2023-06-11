@@ -11,12 +11,10 @@
 const mysql = require("mysql2/promise");
 
 const express = require("express");
-// const fs = require("fs/promises");
 const path = require("path");
 
 const globby = require("globby");
 const multer = require("multer");
-const { assert } = require("console");
 
 const SERVER_ERROR = "Something went wrong on the server, please try again later.";
 const SERVER_ERR_CODE = 500;
@@ -25,26 +23,11 @@ const DEBUG = true;
 
 const app = express();
 
-
-// To handle different POST formats:
-// for application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true })); // built-in middleware
-// for application/json
-app.use(express.json()); // built-in middleware
-// for multipart/form-data (required with FormData)
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(multer().none());
 
 app.use(express.static("src"));
-
-
-// For Express apps, here's a recommended program breakdown (see OH app.js for larger example)
-// (first, make sure you have your setup.sql DDL finalized)
-// 1. Endpoints as usual
-// 2. Helper functions
-// - SELECT queries
-// - INSERT/DELETE/UPDATE queries
-// - Other helper functions
-// - getDB()
 
 /**
  * Given a username and password, returns whether the credentials are valid.
@@ -64,6 +47,7 @@ app.post("/login", async (req, res) => {
     }
 });
 
+
 /**
  * Given the name of a table, returns all rows and the names of the columns.
  */
@@ -72,6 +56,7 @@ app.get("/table/:name", async (req, res) => {
     let tableQuery = `SELECT * FROM ${tableName};`;
     await getData(tableQuery, res);
 })
+
 
 /**
  * More advanced filtering capabilities
@@ -85,6 +70,11 @@ app.get("/filter/:name/:fields/:filters", async (req, res) => {
 })
 
 
+app.get("/images", async (req, res) => {
+    
+})
+
+
 /**
  * Call the stored procedure to add a new logging activity (assuming the inputs
  * have been validated).
@@ -92,14 +82,11 @@ app.get("/filter/:name/:fields/:filters", async (req, res) => {
 app.post("/add-activity", async (req, res) => {
     let uid = req.body.user_id;
     let args = req.body.args;
-    console.log(args);
     let addQuery = `CALL setup_activity(${uid}, ${args});`;
     try {
         let [resp,_] = await queryDB(addQuery);
         let aff = resp.affectedRows;
         let warn = resp.warningStatus;
-        console.log(aff);
-        console.log(warn);
         if (aff == 1 && warn == 0) {
             res.send({success: 1});
         }
@@ -112,13 +99,12 @@ app.post("/add-activity", async (req, res) => {
     }
 })
 
+
 /**
  * Call a stored procedure to add an entry collected from a form.
  */
 app.post("/log-activity", async (req, res) => {
-
-
-
+    // TODO
 })
 
 
@@ -159,8 +145,9 @@ async function getData(qStr, res) {
     }
 }
 
+
 /**
- * Establishes a database connection to the YOURDB and returns the database object.
+ * Establishes a database connection to timelogdb and returns the database object.
  * Any errors that occur during connection should be caught in the function
  * that calls this one.
  * @returns {Object} - The database object for the connection.

@@ -40,17 +40,16 @@
           <div class="container">
             <label>
               <p>Category name</p>
-              <select class="category-select" id="log-cat-sel">
-              </select>
+              <select class="category-select" id="log-cat-sel" required></select>
             </label>
             <label>
               <p>Activity name</p>
-              <select class="activity-select" id="log-act-sel">
-              </select>
+              <select class="activity-select" id="log-act-sel" required></select>
             </label>
             <label>
               <p>Timestamp</p>
-              <select id="log-time">
+              <select id="log-time" required>
+                <option>--- TBD ---</option>
               </select>
             </label>
             <label>
@@ -65,12 +64,27 @@
         </form>
       </div>
 
-      <div id="report-menu" class="menu hidden">
-
-
-      </div>
-      <div id="sleep-menu" class="menu hidden"></div>
+      <!-- VIEW DATA VISUALIZATIONS -->
       <div id="data-menu" class="menu hidden"></div>
+
+      <!-- VIEW SLEEP AND ACTIVITY REPORTS -->
+      <div id="report-menu" class="menu hidden"></div>
+      <div id="sleep-menu" class="menu hidden"></div>
+      <div id="act-menu" class="menu hidden"></div>
+
+      <!-- CHECK AVAILABLE LOGGING OPTIONS -->
+      <div id="opt-menu" class="menu hidden">
+        <form>
+          <div class="container">
+            <label>
+              <p>Category name</p>
+              <select class="category-select" id="opt-cat-sel"></select>
+            </label>
+          </div>
+        </form>
+
+        <table id="opt-info"></table>
+      </div>
 
       <!-- ADD NEW ACTIVITY -->
       <div id="add-menu" class="menu hidden">
@@ -78,8 +92,7 @@
           <div class="container">
             <label>
               <p>Category name</p>
-              <select class="category-select" name="add-act-cat" required>
-              </select>
+              <select class="category-select" name="add-act-cat" required></select>
             </label>
             <label>
               <p>Activity name</p>
@@ -98,7 +111,7 @@
             </label>
             <div id="goal-set">
                 <label id="goal-num"><p>Goal time (minutes)</p>
-                  <input type="text" placeholder="ex: 60 (default 0)" 
+                  <input type="text" placeholder="ex: 60" 
                         maxlength="4" pattern="[0-9]+" name="goal-time">
                 </label>
                 <div class="radio-btn">

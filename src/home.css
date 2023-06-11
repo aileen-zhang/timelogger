@@ -50,10 +50,10 @@ h1 {
     background-color: var(--lt-blue);
     border-radius: 50px;
     border-color: var(--dk-blue);
-    border-width: 4px;
-    padding: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
+    border-width: 3.5px;
+    padding: 6px;
+    padding-left: 16px;
+    padding-right: 16px;
     margin: 10px;
 }
 
@@ -67,8 +67,7 @@ form {
     flex-direction: column;
     align-content: space-between;
     justify-content: space-around;
-    align-items: end;
-    width: 400px;
+    width: 450px;
 }
 
 label, input, select {
@@ -78,6 +77,7 @@ label, input, select {
 input, select {
     box-sizing: border-box;
     padding: 6px;
+    font-size: medium;
 }
 
 label p {
@@ -90,37 +90,45 @@ label p {
 
 #goal-set {
     display:flex;
-    flex-direction: row; 
-    align-items:last baseline;
-    flex-grow: 1;
-    justify-items: left;
+    flex:1;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 label[for="goal-pm"] {
-    font-size: small;
-    width: 20%;
+    font-size: medium;
     margin: 0;
-    padding-bottom:3px;
 }
 
 #goal-num {
-    width: 45%;
-    margin-right: auto;
+    width: 200px;
+    justify-self: flex-start;
 }
 
 .radio-btn {
     align-self: last baseline;
-    width:27%;
-    text-align: right;
+    padding-bottom: 10px;
 }
 
 input[type="radio"] {
-    width: 20px;
-    margin-right: -5px;
+    width: 25px;
+    margin-right:-10px;
 }
-
 
 .form-btn {
     margin-top: 30px;
-    float: right;
+    align-self: end;
+}
+
+table {
+    margin: 30px 0;
+    min-width: 500px;
+}
+
+th, td {
+    padding: 5px 15px;
+}
+
+tr:hover {
+    background-color: var(--lt-blue);
 }
