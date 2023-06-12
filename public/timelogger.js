@@ -19,17 +19,18 @@
                     "View data reports": "view-reps", "View logging options": "view-opts", 
                     "Add new activity": "new-act"};
 
-    // const TIME_OPT = {"This 30 minutes": "this-30", "Last 30 minutes": "last-30",
-    //                  "Custom time range": "custom-time"};
-
     const REPORT_OPT = {"Sleep statistics": "sleep-stats", "Activity statistics": "act-stats"};
 
-    const SLEEP_OPT = {"Bedtime":"bedtime", "Wake time":"wake-time", 
+    const SLEEP_OPT = {"Summary":"sleep-summary", "Bedtime":"bedtime", "Wake time":"wake-time", 
                         "Sleep duration":"sleep-dur", "Sleep goals":"sleep-goals"};
 
     const DATA_OPT = {"Return image (testing)":"ret-img", "Bar graph": "bar-graph", 
                      "Pie chart": "pie-chart"};
 
+    // const TIME_OPT = {"This 30 minutes": "this-30", "Last 30 minutes": "last-30",
+    //                  "Custom time range": "custom-time"};
+
+    // constants that should be populated once per page load
     let usernameLoggedIn;
     let userIdLoggedIn;
     let categories = {};
@@ -173,8 +174,8 @@
     }
 
     function showData() {
-        printMsg("View recorded data");
-        printPrompt("Select a data visualization format.");
+        printMsg("View logged data");
+        printPrompt("Select a data visualization format. [UNDER CONSTRUCTION]");
         revealMenu("data-menu");
     }
 
@@ -374,10 +375,13 @@
             else {
                 let pm = parseInt(qs("input[name='goal-pm']:checked").value);
                 goal = pm * parseInt(goalIpt);
+                if (isNaN(goal)) {
+                    printPrompt("Please enter an integer goal time.")
+                    return;
+                }
             }
         } catch (err) {
             handleError(err);
-            return;
         }
         
         let argStr = `'${sym}', '${act}', '${cat}', '${desc}', ${goal}`;

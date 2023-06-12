@@ -3,32 +3,33 @@
  * CS 132 Spring 2023
  * 
  * This is the API for the TimeLogger application. Documentation can be found at
- * APIDOC.md in this directory. 
+ * the link in APIDOC.md in this directory. 
  */
 
 "use strict";
 
 const mysql = require("mysql2/promise");
 
-const express = require("express");
-const path = require("path");
 
-const globby = require("globby");
+
+const express = require("express");
 const multer = require("multer");
 
-const SERVER_ERROR = "Something went wrong on the server, please try again later.";
-const DATABASE_ERROR = "Query error, please check your inputs.";
-const SERVER_ERR_CODE = 500;
-const CLIENT_ERR_CODE = 400;
+/* These commented out constants will be useful as more functionality is added */
+// const path = require("path");
+// const globby = require("globby");
+// const SERVER_ERROR = "Something went wrong on the server, please try again later.";
+// const DATABASE_ERROR = "Query error, please check your inputs.";
+// const SERVER_ERR_CODE = 500;
+// const CLIENT_ERR_CODE = 400;
+
 const DEBUG = true;
 
 const app = express();
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(multer().none());
-
-app.use(express.static("src"));
+app.use(express.static("public"));
 
 /**
  * Given a username and password, returns whether the credentials are valid.
@@ -157,7 +158,7 @@ async function getData(qStr, res) {
         if (DEBUG) {
             console.log(`data retrieval error: ${err}`)
         }
-        // generic error handling here
+        // TODO: generic error handling here
     }
 }
 

@@ -1,8 +1,12 @@
 {
   "name": "timelog",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "TimeLogger API",
-  "main": "api.js",
+  "main": "app.js",
+  "repository": { 
+    "type": "git", 
+    "url": "https://github.com/aileen-zhang/timelogger"
+  } ,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
