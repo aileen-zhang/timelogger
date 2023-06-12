@@ -33,8 +33,9 @@ app.use(express.static("public"));
 
 /**
  * Given a username and password, returns whether the credentials are valid.
- * TODO check whether the user is an admin
  */
+// TODO: add a parameter for whether the user wants to sign in as an admin and
+// perform an additional query against the database
 app.post("/login", async (req, res) => {
     let un = req.body.username;
     let pw = req.body.password;
@@ -75,7 +76,7 @@ app.get("/filter/:name/:fields/:filters", async (req, res) => {
 
 
 app.get("/images", async (req, res) => {
-
+    // TODO
 })
 
 

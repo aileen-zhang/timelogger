@@ -35,6 +35,7 @@
     let userIdLoggedIn;
     let categories = {};
 
+    
     async function init() {
         installButtons();
         usernameLoggedIn = localStorage.getItem("localUser");
@@ -54,6 +55,7 @@
 /************************** SETUP HELPERS **************************/
    /**
     * Install handlers for logout and return to home buttons
+    * @returns none
     */
     function installButtons() {
         qs("#logout-btn").addEventListener("click", 
@@ -71,6 +73,8 @@
      */
     async function checkUser() {
         if (!usernameLoggedIn) {
+            // don't show the last-logged message until login is confirmed
+            qs("#time-msg").classList.add("hidden");
             printPrompt("Please log out and log in again.");
             return false;
         }
@@ -137,7 +141,8 @@
 
     /**
      * Retrieve timestamp of latest log entry from the current user and display
-     * it on the homescreen
+     * it on the homescreen.
+     * @returns none
      */
     async function getLatestEntry() {
         let tableName = encodeURI("timelog NATURAL JOIN user_task");
@@ -149,6 +154,7 @@
             let r = checkStatus(resp);
             const ret = await r.json();
             let t = (ret.rows[0]).latest_entry;
+            // hacky way to make SQL timestamp more readable
             let ts = new Date(t).toISOString().slice(0, 16).replace('T', ' ');
             qs("#latest-entry").textContent = ts;
             qs("#time-msg").classList.remove("hidden");
@@ -163,6 +169,7 @@
 /************************** MENU DISPLAY HANDLERS **************************/
     /**
      * Attach sub-menu display handlers to all generated menu buttons
+     * @returns none
      */
     function installNav() {
         id("log-act").addEventListener("click", showLog);
@@ -177,6 +184,7 @@
 
     /**
      * Show the main menu (home menu) and reset form fields
+     * @returns none
      */
     function showHome() {
         printWelcome(usernameLoggedIn);
@@ -191,6 +199,9 @@
         id("opt-info").innerHTML = "";
         getLatestEntry();
     }
+
+    // The below functions all reveal a menu and display a large message and
+    // small prompt specific to that menu.
 
     function showLog() {
         printMsg("Log a completed activity");
@@ -233,6 +244,7 @@
     /**
      * Get all images from the /imgs folder to display (eventually, these will
      * be generated data graphics, but for now, they are just screenshots)
+     * @returns none
      */
     async function retImgTest() {
         // TODO
@@ -244,6 +256,7 @@
      * Initialize a page with menu options
      * @param {string} menuId
      * @param {Object} opts
+     * @returns none
      */
     function populateMenuButtons(menuId, opts) {
         const menu = id(menuId);
@@ -273,6 +286,7 @@
 
     /**
      * Initialize category dropdown menus with retrieved categories
+     * @returns none
      */
     function populateCategoryDropdowns() {
         const catDropdowns = qsa(".category-select");
@@ -293,6 +307,7 @@
      * Populate dropdown menu of activities for a selected category
      * @param {string} cat - name of category of interest
      * @param {string} selId - id of the select section to populate with options
+     * @returns none
      */
     async function populateActivityDropdown(cat, selId) {
         const sel = id(selId);
@@ -309,9 +324,10 @@
     }
 
     /**
-     * Populate and display a table of activity name, description, and goal times
+     * Populate and display a table of activity name, description, and goal time
      * @param {string} cat - name of category of interest
      * @param {string} tabId - id of the table to populate with info
+     * @returns none
      */
     async function populateActivityTable(cat, tabId) {
         const tab = id(tabId);
@@ -348,6 +364,7 @@
 
     /**
      * Install handlers for buttons to submit the forms to log and add entries
+     * @returns none
      */
     function installFormSubmits() {
         qs("#log-cat-sel").addEventListener("change", 
@@ -363,6 +380,7 @@
     /**
      * Run this function each time a new category is chosen to change a
      * dropdown menu to reflect the activities in that category.
+     * @returns none
      */
     async function populateLogActDropdown() {
         let cat = qs("#log-cat-sel").value;
@@ -372,6 +390,7 @@
     /**
      * Run this function each time a new category is chosen to populate a
      * table to display the activities.
+     * @returns none
      */
     async function populateActTable() {
         let cat = qs("#opt-cat-sel").value;
@@ -445,6 +464,7 @@
     /**
      * Displays a large message in the prompt area
      * @param {string} msg - message to print
+     * @returns none
      */
     function printMsg(msg) {
         qs("#large-msg").textContent = msg;
@@ -453,6 +473,7 @@
     /**
      * Displays a smaller message in the prompt area
      * @param {string} msg - message to print
+     * @returns none
      */
     function printPrompt(msg) {
         qs("#prompt").textContent = msg;
@@ -461,6 +482,7 @@
     /**
      * Display the welcome message with the client's username
      * @param {string} un - the username, usually USERNAME
+     * @returns none
      */
     function printWelcome(un) {
         printMsg("Welcome back, ");
@@ -473,6 +495,7 @@
     /**
      * Display just the menu element that matches the given id
      * @param {string} menuId - the id of the div element to show
+     * @returns none
      */
     function revealMenu(menuId) {
         if (menuId == "main-menu") {
@@ -497,6 +520,12 @@
 
 /************************** ERROR HANDLING **************************/
 
+    /**
+     * Print a specific returned error message if printable, or print a
+     * generic message if not.
+     * @param {*} err
+     * @returns none
+     */
     function handleError(err) {
         if (typeof err === "string") {
             printPrompt(err);

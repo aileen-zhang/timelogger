@@ -82,7 +82,7 @@ Once implemented, these features will allow users to retrieve, analyze, and disp
 
 ### View logging options
 
-Select a category from the dropdown menu to display a description of your available log options under that category.
+Select a category from the dropdown menu to display a description of which activities are available for you to log under that category.
 
 ### Add new activity
 
@@ -103,18 +103,25 @@ Made by Aileen Zhang for the CS 132 course at Caltech
 <details>
 <summary>Dev notes</summary>
 
-#### TODOs
-##### High priority
-* Add error handling in api.js
+### TODOs and FIXMEs
+#### High priority
+* Add error handling in app.js
 * Add image retrival endpoints and functions
 * Finish APIDOC
 
-##### Low priority
+#### Low priority
 * Port sleep report functionality from app.py
 * Better error handling using middleware stack
+* Add text validation form entries (to prevent SQL injections)
 
-##### New features
+#### New features
 * Add graph generation (instead of hardcoded images)
 * Activity reports
+* Admin console and actions
+
+#### Known bugs
+* Adding new activity does not check for duplicates (should raise SQL warning)
+* Test users don't have sleep tracking turned on by default
+* Latest entry time is default time if a user has no log entries
 
 </details>
