@@ -110,7 +110,7 @@ input, select, .goal-radio {
 
 input[type="radio"] {
     width: 25px;
-    margin-right:-10px;
+    margin-right:-5px;
 }
 
 .form-btn {

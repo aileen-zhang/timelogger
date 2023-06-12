@@ -1,9 +1,2 @@
-sql/app-demo.py
-sql/data_f21/log_clean.csv
-sql/data_f21/log_raw.csv
-sql/data_f21/process_log.ipynb
-sql/data_f21/task_symbol.csv
+ignore/
 node_modules/
-public/exampleapi.js
-package-lock.json
-vscode/
