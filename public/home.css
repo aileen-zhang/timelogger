@@ -8,28 +8,38 @@ body {
 main {
     margin-left: 100px;
     margin-right: 100px;
+}
+
+main, header, .menu, #header-btns, .container, #goal-set {
+    display: flex;
+}
+
+main, .menu {
     align-items: center;
 }
 
-main, header, .menu {
-    display: flex;
+main, header, .menu, .container {
     justify-content: space-evenly;
     flex-direction: column;
 }
 
 h1 {
     font-size: x-large;
+}
+
+h1, label[for="goal-pm"] {
     margin: 0;
 }
 
 #header-btns {
-    display: flex;
     flex-direction: row-reverse;
+}
+
+#header-btns, #goal-set {
     justify-content: space-between;
 }
 
 #current-user {
-    color: var(--dk-blue);
     text-transform: capitalize;
 }
 
@@ -40,34 +50,23 @@ h1 {
 
 .menu {
     width: 70%;
-    align-items: center;
-}
-
-.menu > button {
-    font-size: large;
-    font-weight: bold;
-    color: var(--dk-blue);
-    background-color: var(--lt-blue);
-    border-radius: 50px;
-    border-color: var(--dk-blue);
-    border-width: 3.5px;
-    padding: 6px;
-    padding-left: 16px;
-    padding-right: 16px;
-    margin: 10px;
 }
 
 form {
     margin: 20px;
-    margin-top: 10px;
 }
 
 .container {
-    display:flex;
-    flex-direction: column;
     align-content: space-between;
-    justify-content: space-around;
     width: 450px;
+}
+
+form, input, select {
+    margin-top: 5px;
+}
+
+label {
+    margin-top: 15px;
 }
 
 label, input, select {
@@ -76,28 +75,27 @@ label, input, select {
 
 input, select {
     box-sizing: border-box;
-    padding: 6px;
-    font-size: medium;
 }
 
-label p {
-    margin-bottom: 5px;
-    padding: 0;
-    font-weight: bold;
-    color: var(--dk-blue);
+input, select, .menu > button {
+    padding: 6px;
+}
+
+label span {
     font-family: 'Poppins', sans-serif;
 }
 
-#goal-set {
-    display:flex;
-    flex:1;
-    flex-direction: row;
-    justify-content: space-between;
+label span, .menu > button, #current-user {
+    font-weight: bold;
+    color: var(--dk-blue);
 }
 
-label[for="goal-pm"] {
+#goal-set {
+    flex:1;
+}
+
+input, select, .goal-radio {
     font-size: medium;
-    margin: 0;
 }
 
 #goal-num {
@@ -129,6 +127,20 @@ th, td {
     padding: 5px 15px;
 }
 
-tr:hover {
+tr:hover, .menu > button {
     background-color: var(--lt-blue);
+}
+
+#time-msg, .goal-radio {
+    margin-top: 0;
+}
+
+.menu > button {
+    font-size: large;
+    border-radius: 50px;
+    border-color: var(--dk-blue);
+    border-width: 3.5px;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin: 10px;
 }

@@ -12,7 +12,7 @@
     const FILTER_URL = "/filter/"
     const ADD_URL = "/add-activity";
     // const LOG_URL = "/log-activity";
-    const IMG_URL = "/images"
+    // const IMG_URL = "/images"
 
     // Preset dictionaries of button text and button label
     const HOME_OPT = {"Log completed activity": "log-act", "View logged data": "view-data",
@@ -24,8 +24,8 @@
     const SLEEP_OPT = {"Summary":"sleep-summary", "Bedtime":"bedtime", "Wake time":"wake-time", 
                         "Sleep duration":"sleep-dur", "Sleep goals":"sleep-goals"};
 
-    const DATA_OPT = {"Return image (testing)":"ret-img", "Bar graph": "bar-graph", 
-                     "Pie chart": "pie-chart"};
+    // const DATA_OPT = {"Return image (testing)":"ret-img", "Bar graph": "bar-graph", 
+    //                  "Pie chart": "pie-chart"};
 
     // const TIME_OPT = {"This 30 minutes": "this-30", "Last 30 minutes": "last-30",
     //                  "Custom time range": "custom-time"};
@@ -44,7 +44,7 @@
             populateMenuButtons("main-menu", HOME_OPT);
             populateMenuButtons("report-menu", REPORT_OPT);
             populateMenuButtons("sleep-menu", SLEEP_OPT);
-            populateMenuButtons("data-menu", DATA_OPT);
+            // populateMenuButtons("data-menu", DATA_OPT);
             installNav();
             installFormSubmits();
             showHome();
@@ -135,6 +135,30 @@
         }
     }
 
+    /**
+     * Retrieve timestamp of latest log entry from the current user and display
+     * it on the homescreen
+     */
+    async function getLatestEntry() {
+        let tableName = encodeURI("timelog NATURAL JOIN user_task");
+        let whereClause = encodeURI(`user_id=${userIdLoggedIn}`);
+        let tableCols = encodeURI("MAX(log_time) AS latest_entry");
+        let qStr = `${tableName}/${tableCols}/${whereClause}`;
+        let resp = await fetch(FILTER_URL + qStr);
+        try {
+            let r = checkStatus(resp);
+            const ret = await r.json();
+            let t = (ret.rows[0]).latest_entry;
+            let ts = new Date(t).toISOString().slice(0, 16).replace('T', ' ');
+            qs("#latest-entry").textContent = ts;
+            qs("#time-msg").classList.remove("hidden");
+        } catch (err) {
+            handleError(err);
+        }
+    }
+
+
+
 
 /************************** MENU DISPLAY HANDLERS **************************/
     /**
@@ -148,7 +172,7 @@
         id("new-act").addEventListener("click", showNew);
         id("sleep-stats").addEventListener("click", showSleep);
         // this is just a demo of the image return
-        id("ret-img").addEventListener("click", async () => {await retImgTest()});
+        // id("ret-img").addEventListener("click", async () => {await retImgTest()});
     }
 
     /**
@@ -165,6 +189,7 @@
         actDD.innerHTML = "";
         actDD.appendChild(def);
         id("opt-info").innerHTML = "";
+        getLatestEntry();
     }
 
     function showLog() {
@@ -466,6 +491,8 @@
                 menu.classList.add("hidden");
             }
         });
+        // only show latest entry time on the home page
+        qs("#time-msg").classList.add("hidden");
     }
 
 /************************** ERROR HANDLING **************************/

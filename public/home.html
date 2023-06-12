@@ -32,6 +32,7 @@
     </header>
     <main>
       <h2 id="large-msg"></h2>
+      <p id="time-msg">Your latest entry was for <span id="latest-entry"></span></p>
       <h3 id="prompt"></h3>
       <div id="main-menu" class="menu"></div>
 
@@ -40,21 +41,23 @@
         <form id="log-act-form">
           <div class="container">
             <label>
-              <p>Category name</p>
-              <select class="category-select" id="log-cat-sel" required></select>
-            </label>
-            <label>
-              <p>Activity name</p>
-              <select class="activity-select" id="log-act-sel" required></select>
-            </label>
-            <label>
-              <p>Timestamp</p>
-              <select id="log-time" required>
-                <option>--- UNDER CONSTRUCTION ---</option>
+              <span>Category name</span>
+              <select class="category-select" id="log-cat-sel" required>
+                <!-- these select menus will be populated dynamically -->
               </select>
             </label>
             <label>
-              <p>Description</p>
+              <span>Activity name</span>
+              <select class="activity-select" id="log-act-sel" required></select>
+            </label>
+            <label>
+              <span>Timestamp</span>
+              <select id="log-time" required>
+                <option value="">--- UNDER CONSTRUCTION ---</option>
+              </select>
+            </label>
+            <label>
+              <span>Description</span>
               <input type="text" placeholder="ex: weightlifting with friends" 
                      maxlength="100" name="log-desc">
             </label>
@@ -78,7 +81,7 @@
         <form>
           <div class="container">
             <label>
-              <p>Category name</p>
+              <span>Category name</span>
               <select class="category-select" id="opt-cat-sel"></select>
             </label>
           </div>
@@ -92,36 +95,36 @@
         <form id="add-act-form">
           <div class="container">
             <label>
-              <p>Category name</p>
+              <span>Category name</span>
               <select class="category-select" name="add-act-cat" required></select>
             </label>
             <label>
-              <p>Activity name</p>
+              <span>Activity name</span>
               <input type="text" placeholder="ex: running" name="add-act-name" 
                      maxlength="20" required>
             </label>
             <label>
-              <p>Logging symbol</p>
+              <span>Logging symbol</span>
               <input type="text" placeholder="ex: run" name="add-act-sym" 
                      maxlength="10" required>
             </label>
             <label>
-              <p>Description</p>
+              <span>Description</span>
               <input type="text" placeholder="ex: running outside and at the gym" 
                      maxlength="100" name="add-act-desc">
             </label>
             <div id="goal-set">
-                <label id="goal-num"><p>Goal time (minutes)</p>
+                <label id="goal-num"><span>Goal time (minutes)</span>
                   <input type="text" placeholder="ex: 60" 
                         maxlength="4" pattern="[0-9]+" name="goal-time">
                 </label>
                 <div class="radio-btn">
                   <input type="radio" name="goal-pm" value="1" checked>
-                  <label for="goal-pm">less than</label>
+                  <label class="goal-radio">less than</label>
                 </div>
                 <div class="radio-btn">
                   <input type="radio" name="goal-pm" value="-1">
-                  <label for="goal-pm">more than</label>
+                  <label class="goal-radio">more than</label>
                 </div>
             </div>
             <button id="add-act-btn" type="submit" class="nav-btn form-btn">
