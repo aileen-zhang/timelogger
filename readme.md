@@ -8,3 +8,16 @@ What are the best practices for when and how to open and close database connecti
 
 Why is it that hitting the back button doesn't reload the site? How can I force it to reload?
 
+## TODOs
+#### High priority
+Add error handling in api.js
+
+Add image retrival endpoints and functions
+
+Finish APIDOC
+
+#### Low priority
+Port sleep report functionality from app.py
+
+Add graph generation (instead of hardcoded images)
+
