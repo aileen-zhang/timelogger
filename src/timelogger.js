@@ -147,7 +147,7 @@
         id("new-act").addEventListener("click", showNew);
         id("sleep-stats").addEventListener("click", showSleep);
         // this is just a demo of the image return
-        id("ret-img").addEventListener("click", retImgTest);
+        id("ret-img").addEventListener("click", async () => {await retImgTest()});
     }
 
     /**
@@ -200,6 +200,16 @@
         printMsg("Sleep analysis reports");
         printPrompt("Select the report you would like to view. [UNDER CONSTRUCTION]");
         revealMenu("sleep-menu");
+    }
+
+
+/************************** IMAGE RETRIEVAL TESTS **************************/
+    /**
+     * Get all images from the /imgs folder to display (eventually, these will
+     * be generated data graphics, but for now, they are just screenshots)
+     */
+    async function retImgTest() {
+        // TODO
     }
 
 

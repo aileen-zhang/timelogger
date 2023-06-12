@@ -17,6 +17,7 @@ const globby = require("globby");
 const multer = require("multer");
 
 const SERVER_ERROR = "Something went wrong on the server, please try again later.";
+const DATABASE_ERROR = "Query error, please check your inputs.";
 const SERVER_ERR_CODE = 500;
 const CLIENT_ERR_CODE = 400;
 const DEBUG = true;
@@ -43,7 +44,9 @@ app.post("/login", async (req, res) => {
         res.send({login: val});
     }
     catch (err) {
-        console.log("/login broke");
+        if (DEBUG) {
+            console.log(`/login error: ${err}`)
+        }
     }
 });
 
@@ -71,7 +74,7 @@ app.get("/filter/:name/:fields/:filters", async (req, res) => {
 
 
 app.get("/images", async (req, res) => {
-    
+
 })
 
 
@@ -95,7 +98,9 @@ app.post("/add-activity", async (req, res) => {
         }
     }
     catch (err) {
-        console.log("/add-activity broke");
+        if (DEBUG) {
+            console.log(`/add-activity error: ${err}`)
+        }
     }
 })
 
@@ -126,11 +131,19 @@ async function queryDB(qStr) {
     }
     catch (err) {
         db.close();
-        console.log("query broke!");
-        console.log(err);
+        if (DEBUG) {
+            console.log(`query error: ${err}`)
+        }
     }
 }
 
+
+/**
+ * Execute a query, send any returned data or an error message specified by
+ * the calling function.
+ * @param {string} qStr 
+ * @param {Response} res 
+ */
 async function getData(qStr, res) {
     try {
         let [r, f] = await queryDB(qStr);
@@ -141,7 +154,10 @@ async function getData(qStr, res) {
         res.send({rows: r, fields:fnames});
     }
     catch (err) {
-        console.log(err);
+        if (DEBUG) {
+            console.log(`data retrieval error: ${err}`)
+        }
+        // generic error handling here
     }
 }
 

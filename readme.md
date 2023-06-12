@@ -10,14 +10,14 @@ Why is it that hitting the back button doesn't reload the site? How can I force 
 
 ## TODOs
 #### High priority
-Add error handling in api.js
-
-Add image retrival endpoints and functions
-
-Finish APIDOC
+* Add error handling in api.js
+* Add image retrival endpoints and functions
+* Finish APIDOC
 
 #### Low priority
-Port sleep report functionality from app.py
+* Port sleep report functionality from app.py
+* Better error handling using middleware stack
 
-Add graph generation (instead of hardcoded images)
-
+### Features to implement
+* Add graph generation (instead of hardcoded images)
+* Activity reports

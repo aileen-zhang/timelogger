@@ -7,7 +7,7 @@ The TimeLogger API allows users to interact with the TimeLogger database via a w
 Summary of endpoints:
 * GET /table/:name
 * GET /filter/:name/:fields/:filters
-* GET /images
+* GET /images (under construction)
 * GET /images/:type (under construction)
 * POST /login
 * POST /add-activity
